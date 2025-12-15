@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy"
+    content="script-src 'self'" />
+  <meta http-equiv="X-Content-Security-Policy"
+    content="script-src 'self'" />
+  <title>SPTEnlightened - Start</title>
+  <link rel="stylesheet" href="./src/styles/index.css">
+  <!-- <script src="src/render_page.js" defer></script> -->
+</head>
+
+<body>
+
+  <div class="page">
+
+    <header>
+
+      <div class="container">
+
+        <div class="logo">
+          <img src="./src/assets/icons/spt-logo-alt.png" alt="SPT-Logo"
+            title="SPT Logo"></img>
+        </div>
+
+        <div class="nav">
+
+          <button class="menubtn" id="nav_globals">
+            Globals
+          </button>
+          <button class="menubtn" id="nav_bots">
+            Bots
+          </button>
+          <button class="menubtn" id="nav_quests">
+            Quests
+          </button>
+          <button class="menubtn" id="nav_maps">
+            Maps
+          </button>
+          <button class="menubtn" id="nav_traders">
+            Traders
+          </button>
+          <button class="menubtn" id="nav_player">
+            Player PMC
+          </button>
+
+        </div>
+
+        <div class="nav_end">
+          <!-- <button class="btn secondary" id="saveBtn" title="Save file"
+              onclick="saveFile()"><span>Save</span></button>
+            <button class="btn secondary" id="loadBtn" title="Open data"
+              onclick="openFile()"><span>Load</span></button> -->
+          <svg width="64px" height="64px" viewBox="-2.4 -2.4 28.80 28.80"
+            fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#dcdcdc">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+              stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <g clip-path="url(#cfcfcfclip0_429_11066)">
+                <path d="M3 6.00092H21M3 12.0009H21M3 18.0009H21"
+                  stroke="#cfcfcf" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </g>
+              <defs>
+                <clipPath id="clip0_429_11066">
+                  <rect width="24" height="24" fill="white"
+                    transform="translate(0 0.000915527)"></rect>
+                </clipPath>
+              </defs>
+            </g>
+          </svg>
+        </div>
+
+      </div>
+
+    </header>
+
+    <main>
+
+      <aside>
+        <div class="stack">
+          <div class="sideNav">
+
+            <button id="a_globals" class="sideLink">
+              <img src="./src/assets/icons/Legendary_35.png" width="32px"
+                height="32px">
+              <span>Global Settings</span>
+            </button>
+            <button id="a_player" class="sideLink">
+              <img src="./src/assets/icons/prestige1.png" width="32px"
+                height="32px"> <span>Player PMC</span>
+            </button>
+            <button id="a_bots" class="sideLink">
+              <img src="./src/assets/images/tarkov/figurines\killa_fig.webp"
+                width="32px" height="32px"> <span>Enemy Bots</span>
+            </button>
+            <button id="a_maps" class="sideLink">
+              <img src="./src/assets/icons/compass.png" width="32px"
+                height="32px"> <span>Maps</span>
+            </button>
+            <button id="a_traders" class="sideLink">
+              <img src="./src/assets/images/tarkov/trader_avatars/mechanic.png"
+                width="32px" height="32px"> <span>Traders</span>
+            </button>
+            <button id="a_quests" class="sideLink">
+              <img src="./src/assets/icons/pocketwatch.png" width="32px"
+                height="32px"> <span>Quests</span>
+            </button>
+
+          </div>
+
+          <label for="search"> Search area: (optional)
+          </label>
+
+          <textarea id="search" class="text"
+            placeholder="Find a value or property within the loaded document."></textarea>
+
+          <div class="tip muted">
+            Tip: <span class="kbd">Ctrl</span> + <span class="kbd">S</span> to
+            save,
+            <span class="kbd">Ctrl</span> + <span class="kbd">Enter</span> to
+            run.
+          </div>
+        </div>
+      </aside>
+
+      <section class="content">
+
+        <div class="info_block">
+          <h1>Get Started!</h1>
+
+          <ul class="no-deco">
+            <li>Click the <span class="kbd">Load</span> button to get
+              started
+              making changes to your <span class="spt"><a
+                  href="https://sp-tarkov.com/"><img
+                    src="./src/assets/images/tarkov/icon.ico"
+                    alt="Single Player Tarkov"></a></span> save
+              files. </li>
+            <li>If you have multiple SPT versions installed, please select
+              the version with the profile you wish to configure.</li>
+            <li>For more information about SPTarkov check out the
+              installation
+              guide <a href="https://sp-tarkov.com/">here</a>.</li>
+          </ul>
+        </div>
+
+        <div class="file-select panel">
+          <h3>Open a file to make changes.</h3>
+          <input type="file" id="fileInput" accept="json/*">
+        </div>
+
+        <form id="file-form" class="hidden">
+          <div>
+            <p><strong>File: </strong>
+              <span id="filename"></span>
+            </p>
+            <p><strong>Path: </strong>
+              <span id="filepath"></span>
+            </p>
+
+            <label class="form-label">Width: </label>
+            <input type="number" name="width" id="width" class="form-input" />
+          </div>
+        </form>
+
+
+
+      </section>
+
+    </main>
+
+    <footer>
+      <p>Created by: ohs-dev<br>
+        Source: <a
+          href="https://github.com/ohs-dev/spt-config.git">https://github.com/ohs-dev/spt-config.git</a>
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- <script src="./src/index.ts" type="module"></script> -->
+  <script type="module" src="/src/renderer.ts"></script>
+</body>
+
+</html>

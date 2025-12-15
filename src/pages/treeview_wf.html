@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Editor - Electron App Wireframe</title>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/photon/0.1.2-alpha/css/photon.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .window {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .window-content {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .pane-group {
+      display: flex;
+      width: 100%;
+    }
+
+    .pane {
+      overflow-y: auto;
+    }
+
+    .pane-tree {
+      width: 33.333%;
+      border-right: 1px solid #ddd;
+      background: #f5f5f5;
+    }
+
+    .pane-editor {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .tree-view {
+      padding: 10px;
+    }
+
+    .tree-view-header {
+      font-size: 11px;
+      font-weight: 600;
+      color: #777;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding: 0 5px;
+    }
+
+    .tree-item {
+      display: flex;
+      align-items: center;
+      padding: 4px 8px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 15px;
+    }
+
+    .tree-item:hover {
+      background: #e8e8e8;
+    }
+
+    .tree-item.selected {
+      background: #dae4f2;
+      border-left: 2px solid #116cd6;
+      padding-left: 6px;
+    }
+
+    .tree-item .icon {
+      margin-right: 6px;
+      font-size: 14px;
+      width: 14px;
+      text-align: center;
+    }
+
+    .tree-item .chevron {
+      margin-right: 4px;
+      color: #666;
+      font-size: 10px;
+      width: 12px;
+      text-align: center;
+    }
+
+    .tree-item .type-badge {
+      margin-left: 8px;
+      font-size: 10px;
+      color: #999;
+    }
+
+    .tree-children {
+      padding-left: 20px;
+    }
+
+    .editor-section {
+      max-width: 600px;
+    }
+
+    .editor-header {
+      font-size: 11px;
+      font-weight: 600;
+      color: #777;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 6px 10px;
+      font-size: 13px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #116cd6;
+      box-shadow: 0 0 0 2px rgba(17, 108, 214, 0.1);
+    }
+
+    .form-control[readonly] {
+      background: #f5f5f5;
+    }
+
+    .btn-group {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+    }
+
+    .btn {
+      margin-right: 8px;
+    }
+
+    .empty-state {
+      color: #999;
+      font-size: 13px;
+    }
+
+    .toolbar-actions .btn-group {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .toolbar-actions span {
+      font-size: 16px;
+    }
+
+    .toolbar-actions .btn-group .btn {
+      margin: 0;
+    }
+
+    .header .title {
+      font-weight: 500;
+    }
+
+    .title-modified {
+      color: #999;
+      font-weight: normal;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="window">
+    <!-- Header -->
+    <header class="toolbar toolbar-header">
+      <div class="toolbar-actions">
+        <div class="btn-group">
+          <button class="btn btn-default" id="btnOpen">
+            <span class="icon icon-folder"></span>
+            Open
+          </button>
+          <button class="btn btn-positive" id="btnSave">
+            <span class="icon icon-floppy"></span>
+            Save
+          </button>
+        </div>
+
+        <button class="btn btn-default">
+          <span class="icon icon-plus"></span>
+          Add
+        </button>
+        <button class="btn btn-default">
+          <span class="icon icon-trash"></span>
+          Delete
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="window-content">
+      <div class="pane-group">
+        <!-- Tree View -->
+        <div class="pane pane-tree">
+          <div class="tree-view">
+            <div class="tree-view-header">Structure</div>
+            <!-- The main tree objects -->
+            <div id="treeContainer"></div>
+          </div>
+        </div>
+
+        <!-- Editor Panel -->
+        <div class="pane pane-editor">
+          <div class="editor-section">
+            <div class="editor-header">Properties</div>
+            <div id="editorContainer"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="toolbar toolbar-footer">
+      <div class="toolbar-actions">
+        <span id="statusText">Ready</span>
+        <span class="icon icon-search"></span>
+        <span class="icon icon-mail"></span>
+        <span class="icon icon-star"></span>
+        <span class="icon icon-star-empty"></span>
+        <span class="icon icon-user"></span>
+        <span class="icon icon-users"></span>
+        <span class="icon icon-user-add"></span>
+        <br>
+        <span class="icon icon-layout"></span>
+        <span class="icon icon-menu"></span>
+        <span class="icon icon-check"></span>
+        <span class="icon icon-cancel"></span>
+        <span class="icon icon-cancel-circled"></span>
+        <span class="icon icon-cancel-squared"></span>
+        <span class="icon icon-plus"></span>
+        <span class="icon icon-plus-circled"></span>
+        <span class="icon icon-plus-squared"></span>
+        <span class="icon icon-minus"></span>
+        <span class="icon icon-minus-circled"></span>
+        <span class="icon icon-minus-squared"></span>
+        <br>
+        <span class="icon icon-help"></span>
+        <span class="icon icon-help-circled"></span>
+        <span class="icon icon-info"></span>
+        <span class="icon icon-info-circled"></span>
+        <span class="icon icon-back"></span>
+        <span class="icon icon-home"></span>
+        <span class="icon icon-link"></span>
+        <span class="icon icon-attach"></span>
+        <span class="icon icon-lock"></span>
+        <span class="icon icon-lock-open"></span>
+        <span class="icon icon-eye"></span>
+        <span class="icon icon-tag"></span>
+        <span class="icon icon-flag"></span>
+        <br>
+        <span class="icon icon-thumbs-up"></span>
+        <span class="icon icon-thumbs-down"></span>
+        <span class="icon icon-download"></span>
+        <span class="icon icon-upload"></span>
+        <span class="icon icon-upload-cloud"></span>
+        <span class="icon icon-reply"></span>
+        <span class="icon icon-reply-all"></span>
+        <span class="icon icon-forward"></span>
+        <span class="icon icon-quote"></span>
+        <span class="icon icon-code"></span>
+        <span class="icon icon-export"></span>
+        <span class="icon icon-pencil"></span>
+        <span class="icon icon-print"></span>
+        <span class="icon icon-keyboard"></span>
+        <span class="icon icon-comment"></span>
+        <span class="icon icon-chat"></span>
+        <span class="icon icon-bell"></span>
+        <span class="icon icon-attention"></span>
+        <span class="icon icon-alert"></span>
+        <br>
+        <span class="icon icon-doc"></span>
+        <span class="icon icon-docs"></span>
+        <span class="icon icon-doc-landscape"></span>
+        <span class="icon icon-doc-text"></span>
+        <span class="icon icon-doc-text-inv"></span>
+        <span class="icon icon-book-open"></span>
+        <span class="icon icon-book"></span>
+        <span class="icon icon-folder"></span>
+        <span class="icon icon-archive"></span>
+        <span class="icon icon-box"></span>
+        <span class="icon icon-cog"></span>
+        <span class="icon icon-tools"></span>
+        <span class="icon icon-share"></span>
+        <span class="icon icon-basket"></span>
+        <span class="icon icon-calendar"></span>
+        <span class="icon icon-login"></span>
+        <span class="icon icon-logout"></span>
+        <span class="icon icon-clock"></span>
+        <span class="icon icon-hourglass"></span>
+        <span class="icon icon-lamp"></span>
+        <br>
+        <span class="icon icon-light-down"></span>
+        <span class="icon icon-light-up"></span>
+        <span class="icon icon-adjust"></span>
+        <span class="icon icon-block"></span>
+        <span class="icon icon-resize-full"></span>
+        <span class="icon icon-resize-small"></span>
+        <span class="icon icon-popup"></span>
+        <span class="icon icon-publish"></span>
+        <span class="icon icon-window"></span>
+        <br>
+        <span class="icon icon-arrow-combo"></span>
+        <span class="icon icon-down-circled"></span>
+        <span class="icon icon-left-circled"></span>
+        <span class="icon icon-right-circled"></span>
+        <span class="icon icon-up-circled"></span>
+        <br>
+        <span class="icon icon-down-open"></span>
+        <span class="icon icon-left-open"></span>
+        <span class="icon icon-right-open"></span>
+        <span class="icon icon-up-open"></span>
+        <span class="icon icon-down-open-mini"></span>
+        <span class="icon icon-left-open-mini"></span>
+        <span class="icon icon-right-open-mini"></span>
+        <span class="icon icon-up-open-mini"></span>
+        <span class="icon icon-down-open-big"></span>
+        <span class="icon icon-left-open-big"></span>
+        <span class="icon icon-right-open-big"></span>
+        <span class="icon icon-up-open-big"></span>
+        <br>
+        <span class="icon icon-down"></span>
+        <span class="icon icon-left"></span>
+        <span class="icon icon-right"></span>
+        <span class="icon icon-up"></span>
+        <span class="icon icon-down-dir"></span>
+        <span class="icon icon-left-dir"></span>
+        <span class="icon icon-right-dir"></span>
+        <span class="icon icon-up-dir"></span>
+        <span class="icon icon-down-bold"></span>
+        <span class="icon icon-left-bold"></span>
+        <span class="icon icon-right-bold"></span>
+        <span class="icon icon-up-bold"></span>
+        <span class="icon icon-down-thin"></span>
+        <span class="icon icon-left-thin"></span>
+        <span class="icon icon-right-thin"></span>
+        <span class="icon icon-up-thin"></span>
+        <span class="icon icon-ccw"></span>
+        <span class="icon icon-cw"></span>
+        <br>
+        <span class="icon icon-arrows-ccw"></span>
+        <span class="icon icon-level-down"></span>
+        <span class="icon icon-level-up"></span>
+        <span class="icon icon-shuffle"></span>
+        <span class="icon icon-loop"></span>
+        <span class="icon icon-switch"></span>
+        <span class="icon icon-list"></span>
+        <span class="icon icon-list-add"></span>
+        <br>
+        <span class="icon icon-signal"></span>
+        <span class="icon icon-trophy"></span>
+        <span class="icon icon-battery"></span>
+        <span class="icon icon-back-in-time"></span>
+        <span class="icon icon-monitor"></span>
+        <span class="icon icon-mobile"></span>
+        <span class="icon icon-globe"></span>
+        <span class="icon icon-cloud"></span>
+        <span class="icon icon-cloud-thunder"></span>
+        <span class="icon icon-flash"></span>
+        <span class="icon icon-moon"></span>
+        <br>
+        <span class="icon icon-dot"></span>
+        <span class="icon icon-dot-2"></span>
+        <span class="icon icon-dot-3"></span>
+        <span class="icon icon-erase"></span>
+        <span class="icon icon-chart-pie"></span>
+        <span class="icon icon-chart-line"></span>
+        <span class="icon icon-chart-bar"></span>
+        <span class="icon icon-chart-area"></span>
+        <span class="icon icon-credit-card"></span>
+        <span class="icon icon-clipboard"></span>
+        <span class="icon icon-database"></span>
+        <span class="icon icon-drive"></span>
+        <span class="icon icon-thermometer"></span>
+        <span class="icon icon-key"></span>
+        <br>
+        <span class="icon icon-flow-cascade"></span>
+        <span class="icon icon-flow-branch"></span>
+        <span class="icon icon-flow-tree"></span>
+        <span class="icon icon-flow-line"></span>
+        <span class="icon icon-flow-parallel"></span>
+        <span class="icon icon-github"></span>
+        <span class="icon icon-github-circled"></span>
+
+      </div>
+      <div class="toolbar-actions">
+        <span id="positionText">Line 1, Col 1</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // TypeScript-style JavaScript
+    const state = {
+      expandedNodes: new Set(['root', 'root.user', 'root.settings']),
+      selectedNode: 'root.user.name',
+      hasUnsavedChanges: true
+    };
+
+    const sampleTree = {
+      id: 'root',
+      label: 'data.json',
+      type: 'object',
+      children: [
+        {
+          id: 'root.user',
+          label: 'user',
+          type: 'object',
+          children: [
+            { id: 'root.user.name', label: 'name', type: 'string', value: 'John Doe' },
+            { id: 'root.user.email', label: 'email', type: 'string', value: 'john@example.com' },
+            { id: 'root.user.age', label: 'age', type: 'number', value: '30' }
+          ]
+        },
+        {
+          id: 'root.settings',
+          label: 'settings',
+          type: 'object',
+          children: [
+            { id: 'root.settings.theme', label: 'theme', type: 'string', value: 'dark' },
+            { id: 'root.settings.notifications', label: 'notifications', type: 'boolean', value: 'true' }
+          ]
+        },
+        {
+          id: 'root.tags',
+          label: 'tags',
+          type: 'array',
+          children: [
+            { id: 'root.tags.0', label: '[0]', type: 'string', value: 'javascript' },
+            { id: 'root.tags.1', label: '[1]', type: 'string', value: 'electron' }
+          ]
+        }
+      ]
+    };
+
+    function toggleNode(nodeId) {
+      if (state.expandedNodes.has(nodeId)) {
+        state.expandedNodes.delete(nodeId);
+      } else {
+        state.expandedNodes.add(nodeId);
+      }
+      renderTree();
+    }
+
+    function selectNode(nodeId) {
+      state.selectedNode = nodeId;
+      renderTree();
+      renderEditor();
+    }
+
+    function getIconForType(type) {
+      switch (type) {
+        case 'object':
+        case 'array':
+          return 'icon-folder';
+        default:
+          return 'icon-doc-text';
+      }
+    }
+
+    function renderTreeNode(node, level = 0) {
+      const hasChildren = node.children && node.children.length > 0;
+      const isExpanded = state.expandedNodes.has(node.id);
+      const isSelected = state.selectedNode === node.id;
+
+      const indent = level * 20;
+
+      let html = `
+        <div class="tree-item ${isSelected ? 'selected' : ''}" 
+             style="padding-left: ${indent + 8}px"
+             onclick="selectNode('${node.id}')">
+      `;
+
+      if (hasChildren) {
+        html += `
+          <span class="chevron" onclick="event.stopPropagation(); toggleNode('${node.id}')">
+            ${isExpanded ? '▼' : '▶'}
+          </span>
+        `;
+      } else {
+        html += '<span class="chevron"></span>';
+      }
+
+      html += `
+          <span class="icon ${getIconForType(node.type)}"></span>
+          <span>${node.label}</span>
+          <span class="type-badge">${node.type}</span>
+        </div>
+      `;
+
+      if (hasChildren && isExpanded) {
+        html += '<div class="tree-children">';
+        node.children.forEach(child => {
+          html += renderTreeNode(child, level + 1);
+        });
+        html += '</div>';
+      }
+
+      return html;
+    }
+
+    function renderTree() {
+      const container = document.getElementById('treeContainer');
+      container.innerHTML = renderTreeNode(sampleTree);
+    }
+
+    function findNode(tree, targetId) {
+      if (tree.id === targetId) return tree;
+      if (tree.children) {
+        for (const child of tree.children) {
+          const found = findNode(child, targetId);
+          if (found) return found;
+        }
+      }
+      return null;
+    }
+
+    function renderEditor() {
+      const container = document.getElementById('editorContainer');
+      const node = findNode(sampleTree, state.selectedNode);
+
+      if (!node) {
+        container.innerHTML = '<div class="empty-state">Select a node from the tree to edit its properties</div>';
+        return;
+      }
+
+      let html = `
+        <div class="form-group">
+          <label>Key / Path</label>
+          <input type="text" class="form-control" value="${node.id.replace('root.', '')}" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Type</label>
+          <select class="form-control">
+            <option ${node.type === 'string' ? 'selected' : ''}>string</option>
+            <option ${node.type === 'number' ? 'selected' : ''}>number</option>
+            <option ${node.type === 'boolean' ? 'selected' : ''}>boolean</option>
+            <option ${node.type === 'object' ? 'selected' : ''}>object</option>
+            <option ${node.type === 'array' ? 'selected' : ''}>array</option>
+            <option ${node.type === 'null' ? 'selected' : ''}>null</option>
+          </select>
+        </div>
+      `;
+
+      if (node.value !== undefined) {
+        if (node.type === 'boolean') {
+          html += `
+            <div class="form-group">
+              <label>Value</label>
+              <select class="form-control">
+                <option ${node.value === 'true' ? 'selected' : ''}>true</option>
+                <option ${node.value === 'false' ? 'selected' : ''}>false</option>
+              </select>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="form-group">
+              <label>Value</label>
+              <input type="text" class="form-control" value="${node.value}" placeholder="Enter value...">
+            </div>
+          `;
+        }
+      }
+
+      html += `
+        <div class="btn-group">
+          <button class="btn btn-primary">Apply Changes</button>
+          <button class="btn btn-default">Reset</button>
+        </div>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    // Initialize
+    renderTree();
+    renderEditor();
+
+    // Save button state
+    const btnSave = document.getElementById('btnSave');
+    if (state.hasUnsavedChanges) {
+      btnSave.classList.add('btn-positive');
+    } else {
+      btnSave.disabled = true;
+    }
+  </script>
+</body>
+
+</html>

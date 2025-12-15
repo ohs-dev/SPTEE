@@ -1,0 +1,737 @@
+/* Global variables. */
+:root {
+
+  /* #region ##  Layout  ## */
+
+  --layout-side-padding-min: 1rem;
+  --layout-max-width: 1400px;
+
+  /* Sets side padding to 1rem if the page is resized smaller 
+     than --layout-max-width. */
+  --layout-side-padding: max(var(--layout-side-padding-min),
+      calc((100vw - var(--layout-max-width) + (2rem)) / 2));
+
+  --layout-actual-width: calc(100vw - 2 * var(--layout-side-padding));
+
+  --menu-width-max: 1024px;
+  --menu-width-min: 600px;
+  --menu-height-min: 40px;
+
+  /* Padding on the sides of the page content */
+  --layout-spacing: 1rem;
+
+  /* Padding between elements */
+  --layout-gap: 1rem;
+
+  --header-height: 72px;
+  --standard-border-radius: 5px;
+  --border-width: 1px;
+  --border-size: 1px;
+  --line-height: 1rem;
+
+  /* #endregion */
+
+  /* #region ##  Fonts  ## */
+
+  --sans-font: -apple-system, "Avenir Next", Avenir,
+    "Nimbus Sans L", Roboto, "Noto Sans", "Segoe UI";
+  --mono-font: "Fira Code", "FiraCode Nerd Font Mono", Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+
+  /* #endregion */
+
+  /* #region ##  Theme (L)  ## */
+
+  --bg: #fff;
+  --bg-accent: #f5f7ff;
+  --bg-mdn: rgb(24, 25, 27);
+  --bg-mdn-accent: #212426;
+  /* #212426 equivalent rgb(33,36,38) */
+  --bg-accent-2: #f5f5f5;
+  --bg-header: #fff;
+
+  --border: #898EA4;
+  --menu-border: #f5f7ff;
+  --content-border: #3f3f3f;
+
+  --text: #212121;
+  --text-light: #585858;
+  --text-hp: #d7d7d7;
+  --text-accent: rgb(24, 25, 26);
+  --preformatted: #444;
+  --disabled: #efefef;
+
+  --accent: #0d47a1;
+  --accent-hover: #1266e2;
+  --marked: rgb(255, 221, 51);
+  --marked-muted: rgb(128, 110, 25);
+
+
+
+
+  --code: #d81b60;
+
+  /* Tree View Colors */
+  --tree-bg: rgba(241, 241, 241, 0.8);
+  --tree-text: var(--text);
+  --tree-border: var(--text-light);
+  --tree-caret: #696;
+  --tree-caret-last: #656;
+
+  /* #endregion */
+
+  /* #region ##  Text/Headers  ## */
+
+  --text-h1-l: 2.5rem;
+  --text-h2-l: 2rem;
+  --text-h3-l: 1.5rem;
+  --text-h4-l: 1.3rem;
+
+  --text-h1-m: 1.75rem;
+  --text-h2-m: 1.5rem;
+  --text-h3-m: 1.2rem;
+  --text-h4-m: 1.1rem;
+
+  /* Standard text */
+  --text-sz-xl: 1.25rem;
+  --text-sz-l: 1.15rem;
+  --text-sz-m: 1rem;
+  --text-sz-s: 0.875rem;
+  --text-sz-xs: 0.75rem;
+
+  /* #endregion */
+
+  /* #region ##  Images/Icons  ## */
+
+  /* treeview */
+  --img-tree-open: url('../assets/images/expand-collapse.svg');
+  --img-tree-close: url('../assets/images/expand-collapse.svg');
+  --img-tree-node: url('../assets/images/curly_brackets.png');
+
+  /* #endregion */
+
+}
+
+/* #region ---  @media (dark)  --- */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* --bg: #212121; */
+    /* --bg-accent: #2b2b2b; */
+    /* --bg-header: #212121; */
+    --bg: #18191b;
+    --bg-accent: #191a1b;
+    /* --bg-header: #191a1b; */
+    --bg-header: #18191b;
+
+    --text: #dcdcdc;
+    --text-light: #ababab;
+    --accent: #ffb300;
+    --accent-hover: #ffe099;
+    --text-accent: #fff;
+    --code: #f06292;
+    --preformatted: #ccc;
+    --disabled: #111;
+
+    /* Tree View */
+    --tree-bg: rgba(42, 42, 42, 0.88);
+    --tree-text: rgba(241, 241, 241, 0.8);
+    --tree-border: var(--text-light);
+    --tree-caret: #696;
+    --tree-caret-last: #656;
+  }
+
+  /* Add a bit of transparency so light media isn't so glaring in dark mode */
+  img,
+  video {
+    opacity: 0.8;
+  }
+}
+
+/* #endregion */
+
+/* #region ---  element resets  --- */
+
+html {
+  /* Set the font globally */
+  font-family: var(--sans-font);
+  scroll-behavior: smooth;
+}
+
+/* Reset box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Make the body a nice central block */
+body {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-sz-l);
+}
+
+/* Format links */
+a,
+a:visited {
+  color: var(--accent);
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Format buttons */
+button {
+  font-size: inherit;
+  font-family: inherit;
+  box-shadow: none;
+}
+
+/* Reset default appearance */
+textarea,
+select,
+input,
+progress {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+pre {
+  overflow: auto;
+}
+
+/* Embedded code blocks */
+code {
+  color: var(--marked);
+  font-family: var(--mono-font);
+  font-size: var(--text-sz-l);
+}
+
+details {
+  margin: 0;
+}
+
+article,
+fieldset,
+dialog {
+  border: var(--border-width) solid var(--border);
+  padding: 1rem;
+  border-radius: var(--standard-border-radius);
+  margin-bottom: 1rem;
+}
+
+textarea,
+select,
+input {
+  color: var(--text);
+  background-color: var(--bg);
+  border: var(--border-width) solid var(--border);
+}
+
+/* do not show border around file selector button */
+input[type="file"] {
+  border: 0;
+}
+
+/* Prevent long strings from overflowing container */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* Line height */
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+}
+
+/* Format headers */
+h1 {
+  font-size: var(--text-h1-l);
+}
+
+h2 {
+  font-size: var(--text-h2-l);
+}
+
+h3 {
+  font-size: var(--text-h3-l);
+}
+
+h4 {
+  font-size: var(--text-h4-l);
+}
+
+/* 
+h5 {  font-size: 1.15rem;}
+h6 {  font-size: 0.96rem;} 
+*/
+
+p {
+  margin: 0;
+}
+
+/* #endregion */
+
+
+/* #region ---  Page Layout  --- */
+
+body>.page {
+  margin: 0;
+}
+
+body>.page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* background-color: #212121; */
+  /* background-color: var(--bg-mdn);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23292828' fill-opacity='0.4' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
+  background-image: url(../assets/images/tarkov/hideout-desk.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  opacity: 0.5;
+  z-index: -1;
+}
+
+/* #endregion */
+
+
+/* #region ---  Header  --- */
+
+/* Makes the header bg full width */
+header {
+  position: relative;
+  max-width: 100vw;
+  background-color: var(--bg-header);
+
+  /* Gap before page content. */
+  margin-bottom: var(--layout-spacing);
+  border-bottom: #2f2f2f solid var(--border-size);
+}
+
+/* Container for the nav menu, logo, and hamburger menu */
+header>.container {
+  /* Keep width as wide as with page content. */
+  padding-left: var(--layout-side-padding);
+  padding-right: var(--layout-side-padding);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  padding-left: var(--layout-spacing);
+}
+
+.logo>img {
+  vertical-align: middle;
+}
+
+/* Hamburger button */
+.container>.nav_end {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.container>.nav {
+  max-width: var(--menu-width-max);
+  min-height: var(--menu-height-min);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: var(--layout-spacing);
+}
+
+/* blue tab color mdn #072446 */
+
+.arrow {
+  border: solid #fff;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+/* -- Dropdown menu w/ tabs */
+/* 
+
+  mdn-dropdown {
+    display: contents;
+  }
+  mdn-dropdown:not([loaded],:focus-within) [slot="dropdown"] {
+    display: none;
+  }
+ */
+
+.menubtn {
+  background-color: inherit;
+  word-wrap: nowrap;
+  font-size: 16px;
+  font-family: var(--mono-font);
+  color: var(--text-hp);
+  border: none;
+  box-shadow: none;
+}
+
+.menubtn:hover {
+  background-color: var(--bg-accent);
+}
+
+
+.nav_end {
+  color: blue;
+}
+
+/* #endregion */
+
+
+/* #region ---  <main>  --- */
+
+/* Content container */
+main {
+  padding-left: max(var(--layout-side-padding), var(--layout-side-padding-min));
+  padding-right: max(var(--layout-side-padding), var(--layout-side-padding-min));
+  min-height: 80vh;
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+/* background-color: #181818;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3Crect stroke='%23181818' stroke-width='.5' width='1' height='1' id='s'/%3E%3Cpattern id='a' width='3' height='3' patternUnits='userSpaceOnUse' patternTransform='scale(50) translate(-980 -735)'%3E%3Cuse fill='%232b2b2b' href='%23s' y='2'/%3E%3Cuse fill='%232b2b2b' href='%23s' x='1' y='2'/%3E%3Cuse fill='%23383838' href='%23s' x='2' y='2'/%3E%3Cuse fill='%23383838' href='%23s'/%3E%3Cuse fill='%23434343' href='%23s' x='2'/%3E%3Cuse fill='%23434343' href='%23s' x='1' y='1'/%3E%3C/pattern%3E%3Cpattern id='b' width='7' height='11' patternUnits='userSpaceOnUse' patternTransform='scale(50) translate(-980 -735)'%3E%3Cg fill='%234c4c4c'%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' y='5' /%3E%3Cuse href='%23s' x='1' y='10'/%3E%3Cuse href='%23s' x='2' y='1'/%3E%3Cuse href='%23s' x='2' y='4'/%3E%3Cuse href='%23s' x='3' y='8'/%3E%3Cuse href='%23s' x='4' y='3'/%3E%3Cuse href='%23s' x='4' y='7'/%3E%3Cuse href='%23s' x='5' y='2'/%3E%3Cuse href='%23s' x='5' y='6'/%3E%3Cuse href='%23s' x='6' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='h' width='5' height='13' patternUnits='userSpaceOnUse' patternTransform='scale(50) translate(-980 -735)'%3E%3Cg fill='%234c4c4c'%3E%3Cuse href='%23s' y='5'/%3E%3Cuse href='%23s' y='8'/%3E%3Cuse href='%23s' x='1' y='1'/%3E%3Cuse href='%23s' x='1' y='9'/%3E%3Cuse href='%23s' x='1' y='12'/%3E%3Cuse href='%23s' x='2'/%3E%3Cuse href='%23s' x='2' y='4'/%3E%3Cuse href='%23s' x='3' y='2'/%3E%3Cuse href='%23s' x='3' y='6'/%3E%3Cuse href='%23s' x='3' y='11'/%3E%3Cuse href='%23s' x='4' y='3'/%3E%3Cuse href='%23s' x='4' y='7'/%3E%3Cuse href='%23s' x='4' y='10'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='c' width='17' height='13' patternUnits='userSpaceOnUse' patternTransform='scale(50) translate(-980 -735)'%3E%3Cg fill='%23545454'%3E%3Cuse href='%23s' y='11'/%3E%3Cuse href='%23s' x='2' y='9'/%3E%3Cuse href='%23s' x='5' y='12'/%3E%3Cuse href='%23s' x='9' y='4'/%3E%3Cuse href='%23s' x='12' y='1'/%3E%3Cuse href='%23s' x='16' y='6'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='d' width='19' height='17' patternUnits='userSpaceOnUse' patternTransform='scale(50) translate(-980 -735)'%3E%3Cg fill='%23181818'%3E%3Cuse href='%23s' y='9'/%3E%3Cuse href='%23s' x='16' y='5'/%3E%3Cuse href='%23s' x='14' y='2'/%3E%3Cuse href='%23s' x='11' y='11'/%3E%3Cuse href='%23s' x='6' y='14'/%3E%3C/g%3E%3Cg fill='%235b5b5b'%3E%3Cuse href='%23s' x='3' y='13'/%3E%3Cuse href='%23s' x='9' y='7'/%3E%3Cuse href='%23s' x='13' y='10'/%3E%3Cuse href='%23s' x='15' y='4'/%3E%3Cuse href='%23s' x='18' y='1'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='e' width='47' height='53' patternUnits='userSpaceOnUse' patternTransform='scale(50) translate(-980 -735)'%3E%3Cg fill='%23264463'%3E%3Cuse href='%23s' x='2' y='5'/%3E%3Cuse href='%23s' x='16' y='38'/%3E%3Cuse href='%23s' x='46' y='42'/%3E%3Cuse href='%23s' x='29' y='20'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='f' width='59' height='71' patternUnits='userSpaceOnUse' patternTransform='scale(50) translate(-980 -735)'%3E%3Cg fill='%23264463'%3E%3Cuse href='%23s' x='33' y='13'/%3E%3Cuse href='%23s' x='27' y='54'/%3E%3Cuse href='%23s' x='55' y='55'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='g' width='139' height='97' patternUnits='userSpaceOnUse' patternTransform='scale(50) translate(-980 -735)'%3E%3Cg fill='%23264463'%3E%3Cuse href='%23s' x='11' y='8'/%3E%3Cuse href='%23s' x='51' y='13'/%3E%3Cuse href='%23s' x='17' y='73'/%3E%3Cuse href='%23s' x='99' y='57'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23a)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23b)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23h)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23c)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23d)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23e)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23f)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23g)' width='100%25' height='100%25'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover; */
+
+/* #endregion */
+
+
+/* #region ---  <aside>  --- */
+
+/* The left-hand panel of main area */
+aside {
+  max-width: 25rem;
+  padding: var(--layout-gap);
+  border-left: var(--bg-accent) solid 0.5px;
+  font-size: var(--text-sz-l);
+}
+
+.stack {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--layout-spacing);
+}
+
+.sideNav {
+  /* margin: 0 auto; */
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+/* Aside buttons */
+.sideLink {
+  margin: 0;
+  font-size: var(--text-sz-xl);
+  border: var(--bg-accent) solid 0.5px;
+  padding: 0.5rem 1rem;
+  display: inline-flex;
+  gap: 1rem;
+  align-items: center;
+  background-color: var(--bg);
+}
+
+aside button:hover {
+  /* background-color: rgb(51, 51, 51); */
+  background-color: var(--bg-mdn-accent);
+}
+
+.sideLink img {
+  width: 48px;
+  height: 48px;
+  background-color: var(--bg-accent);
+}
+
+.sideLink span {
+  color: #bcbcbc;
+  font-family: monospace;
+}
+
+.stack>.tip {
+  line-height: calc(2 * var(--line-height));
+}
+
+aside textarea {
+  font-size: var(--text-sz-m);
+  border: var(--bg-accent) solid 0.5px;
+  min-height: 4rem;
+  min-width: 100%;
+}
+
+.muted {
+  color: var(--text-light);
+}
+
+/* #endregion */
+
+
+/* #region --- <section>  --- */
+
+/* The right-hand panel of main area */
+section {
+  /* Border between <aside> & <section> columns */
+  border-left: 0.5px solid var(--bg-accent);
+  border-right: 0.5px solid var(--bg-accent);
+
+  padding: var(--layout-gap);
+  font-size: var(--text-sz-l);
+}
+
+section .two_columns {
+  display: flex;
+  flex-basis: 50%;
+  flex-grow: 1;
+  gap: var(--layout-spacing);
+  padding-bottom: var(--layout-spacing);
+  border-bottom: var(--bg-accent) solid 0.5px;
+}
+
+.panel {
+  width: 100%;
+  /* padding-bottom: var(--layout-gap); */
+  border-bottom: var(--bg-accent) solid 1px;
+  border-top: var(--bg-accent) solid 1px;
+  margin-bottom: var(--layout-gap);
+}
+
+/* #region ---  Info Block  --- */
+
+section .info_block {
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+section .info_block p {
+  line-height: 2rem;
+  display: inline-block;
+}
+
+section .info_block img {
+  height: 40px;
+}
+
+section .info_block ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.info_block ul li {
+  padding-top: 1rem;
+}
+
+.info_block li img {
+  vertical-align: middle;
+}
+
+/* Use mono font for code elements */
+.kbd {
+  color: var(--marked-muted);
+  border: var(--border-width) solid var(--preformatted);
+  border-bottom: 2px solid var(--preformatted);
+  border-radius: var(--standard-border-radius);
+  padding: 1px 4px;
+}
+
+section .eye_candy {
+  width: 100%;
+  height: 100%
+}
+
+/* #endregion ---  Info Block --- */
+
+
+
+/* #endregion */
+
+
+footer {
+  margin-top: 2rem;
+  padding: 2rem 1rem 1.5rem 1rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  text-align: center;
+  border-top: var(--border-width) solid var(--content-border);
+}
+
+
+/* #region ---  @media desktop (half-screen)  --- */
+
+/* Half full-screen size (1440p) */
+@media only screen and (max-width: 1080px) {
+
+  header {
+    margin-bottom: 0;
+  }
+
+  header>.container {
+    font-size: var(--text-sz-m);
+    min-height: 56px;
+  }
+
+  header svg {
+    height: 48px;
+    width: 48px;
+  }
+
+  .logo>img {
+    height: 36px;
+  }
+
+  .nav,
+  .nav_end {
+    max-height: 48px;
+  }
+
+  #nav_profile,
+  #nav_loot,
+  #nav_equipment {
+    display: none;
+  }
+
+  .arrow {
+    display: none;
+  }
+
+  .eye_candy img {
+    display: none;
+  }
+
+  h1 {
+    font-size: var(--text-h1-m);
+  }
+
+  h2 {
+    font-size: var(--text-h2-m);
+  }
+
+  h3 {
+    font-size: var(--text-h3-m);
+  }
+
+  h4 {
+    font-size: var(--text-h4-m);
+  }
+
+  aside {
+    max-width: 15rem;
+    font-size: var(--text-sz-s);
+  }
+
+  section {
+    font-size: var(--text-sz-m);
+  }
+
+  ul,
+  li,
+  p {
+    padding: 0;
+    margin: 0;
+  }
+
+  .sideNav img {
+    width: 32px;
+    height: 32px;
+  }
+
+  img.eye_candy {
+    display: none;
+  }
+
+  .sideLink {
+    font-size: var(--text-sz-m);
+    padding: 0.25rem 0.25rem;
+  }
+
+  code {
+    font-size: var(--text-sz-s);
+  }
+
+  /* Hotkey tip formatting */
+  .kbd {
+    font-size: var(--text-sz-xs);
+    padding-top: 0;
+    line-height: 0.5rem;
+  }
+}
+
+/* #endregion */
+
+/* #region @media - Smarphones */
+
+/* Tablet / Smarphone screen size(s) */
+@media only screen and (max-width: 750px) {
+
+  .container {
+    padding: 0;
+  }
+
+  .logo {
+    padding: 0;
+    justify-self: start;
+  }
+
+  #nav_globals,
+  #nav_ai {
+    display: none;
+  }
+
+  .end {
+    justify-self: end;
+  }
+
+  .info_block img,
+  img.eye_candy {
+    display: none;
+  }
+
+  section {
+    padding: 0;
+    font-size: var(--text-sz-s);
+  }
+
+  aside {
+    display: none;
+  }
+}
+
+/* #endregion */

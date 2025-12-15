@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta charset='utf-8'>
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'" />
+  <title>SPTEnlightened - Bots AI</title>
+  <link rel='stylesheet' type='text/css' media='screen'
+    href='../styles/botconfig.css'>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <header>
+      <div class="menu-wrap row align-c just-sb">
+        <div class="logo align-c just-self-s">
+          <img class="v-align" src="../assets/icons/spt-logo-alt.png"
+            alt="SPT-Logo" title="SPT Logo"></img>
+        </div>
+
+        <div class="menu-hdr row align-c just-sb">
+
+          <button class="menu-btn" id="nav_globals">
+            Globals
+          </button>
+          <button class="menu-btn" id="nav_bots">
+            Bots
+          </button>
+          <button class="menu-btn" id="nav_quests">
+            Quests
+          </button>
+          <button class="menu-btn" id="nav_maps">
+            Maps
+          </button>
+          <button class="menu-btn" id="nav_traders">
+            Traders
+          </button>
+          <button class="menu-btn" id="nav_player">
+            Player PMC
+          </button>
+
+        </div>
+
+        <div class="menu-hb align-c just-self-e">
+          <svg width="64px" height="64px" viewBox="-2.4 -2.4 28.80 28.80"
+            fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#dcdcdc">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+              stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <g clip-path="url(#cfcfcfclip0_429_11066)">
+                <path d="M3 6.00092H21M3 12.0009H21M3 18.0009H21"
+                  stroke="#cfcfcf" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </g>
+              <defs>
+                <clipPath id="clip0_429_11066">
+                  <rect width="24" height="24" fill="white"
+                    transform="translate(0 0.000915527)"></rect>
+                </clipPath>
+              </defs>
+            </g>
+          </svg>
+        </div>
+
+      </div>
+
+    </header>
+
+    <main>
+
+      <aside>
+
+        <div class="stack panel">
+          <div class="sideNav">
+
+            <button id="a_globals" class="sideLink">
+              <img src="../assets/icons/Legendary_35.png" width="32px"
+                height="32px">
+              <span>Global Settings</span>
+            </button>
+
+            <button id="a_player" class="sideLink">
+              <img src="../assets/icons/prestige1.png" width="32px"
+                height="32px"> <span>Player PMC</span>
+            </button>
+
+            <button id="a_bots" class="sideLink">
+              <img src="../assets/images/tarkov/figurines\killa_fig.webp"
+                width="32px" height="32px"> <span>Enemy Bots</span>
+            </button>
+
+            <button id="a_maps" class="sideLink">
+              <img src="../assets/icons/compass.png" width="32px" height="32px">
+              <span>Maps</span>
+            </button>
+
+            <button id="a_traders" class="sideLink">
+              <img src="../assets/images/tarkov/trader_avatars/mechanic.png"
+                width="32px" height="32px"> <span>Traders</span>
+            </button>
+
+            <button id="a_quests" class="sideLink">
+              <img src="../assets/icons/compass.png" alt="" width="32px"
+                height="32px"> <span>Quests</span>
+            </button>
+
+            <!-- <button id="a-hideout" class="sideLink">
+              <img
+                src="../assets/spt/3.11.3/SPT_Data/Server/images/handbook/icon_barter_energy.png"
+                alt="" width="32px" height="32px"> <span>Hideout</span>
+            </button> -->
+
+          </div>
+
+          <label for="search"> Search area: (optional)
+          </label>
+
+          <textarea id="search" class="text"
+            placeholder="Find a value or property within the loaded document."></textarea>
+
+          <div class="tip muted">
+            Tip: <span class="kbd">Ctrl</span> + <span class="kbd">S</span> to
+            save,
+            <span class="kbd">Ctrl</span> + <span class="kbd">Enter</span> to
+            run.
+          </div>
+        </div>
+      </aside>
+
+      <section class="content stack">
+
+        <div class="title-wrap row panel just-sb align-c">
+          <h3 id="botName">Killa</h3>
+          <div class="row align-c title-grid">
+            <button class="btn action warn" id="savePreset">
+              <span class="btnFace">Save Preset</span>
+            </button>
+            <button class="btn action" id="loadPreset">
+              <span class="btnFace">Load Preset</span>
+            </button>
+            <button class="btn action warn" id="applyChanges">
+              <span class="btnFace">Apply Changes</span>
+            </button>
+            <!-- Open -->
+            <input id="openFile" type="file" accept="application/json" hidden>
+            <!-- Save -->
+            <input id="saveFile" type="file" accept="application/json" hidden>
+          </div>
+        </div>
+
+        <div class="diff-wrap row panel just-sb align-c">
+          <h3>AI Difficulty</h3>
+          <div id="difficultyTabs" class="diff-grid tabs align-c">
+            <button class="btn tab" id="easy" data-pane="easy"
+              aria-selected="false">
+              <span class="btnFace">Easy</span>
+            </button>
+            <button class="btn tab active" id="normal" data-pane="normal"
+              aria-selected="true">
+              <span class="btnFace">Normal</span>
+            </button>
+            <button class="btn tab" id="hard" data-pane="hard"
+              aria-selected="false">
+              <span class="btnFace">Hard</span>
+            </button>
+            <button class="btn tab" id="impossible" data-pane="impossible"
+              aria-selected="false">
+              <span class="btnFace">Impossible</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting-wrap row panel just-sb">
+          <h3>Setting</h3>
+          <!-- (old) webTabs -->
+          <div id="settingTabs" class="setting-grid tabs">
+            <button class="btn tab active" aria-selected="true"
+              data-pane="core">Core</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="aiming">Aiming</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="mind">Mind</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="look">Look</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="shoot">Shoot</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="scattering">Scattering</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="hearing">Hearing</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="boss">Boss</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="cover">Cover</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="grenade">Grenade</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="change">Change</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="move">Move</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="lay">Lay</button>
+            <button class="btn tab" aria-selected="false"
+              data-pane="patrol">Patrol</button>
+
+          </div>
+        </div>
+
+        <!-- tab-container -->
+        <div id="webEditors" class="stack panel">
+
+          <!-- Category, Save / Reset buttons -->
+          <div class="ed-label row just-sb align-c">
+            <h3>Normal - Core:</h3>
+            <!-- <div id="editorLabel" class="row align-c">
+            </div> -->
+            <div class="label-grid align-c">
+              <!-- runWeb -->
+              <button class="btn action" id="runWeb">Apply</button>
+              <!-- openPreview -->
+              <button class="btn action" id="reset_ed">Reset</button>
+            </div>
+          </div>
+
+          <!-- Editors -->
+          <div class="editor-wrap" data-pane="Core">
+            <div id="ed_core" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Aiming" hidden>
+            <div id="ed_aiming" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Mind" hidden>
+            <div id="ed_mind" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Look" hidden>
+            <div id="ed_look" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Shoot" hidden>
+            <div id="ed_shoot" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Scattering" hidden>
+            <div id="ed_scattering" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Hearing" hidden>
+            <div id="ed_hearing" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Boss" hidden>
+            <div id="ed_boss" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Cover" hidden>
+            <div id="ed_cover" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Grenade" hidden>
+            <div id="ed_grenade" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Change" hidden>
+            <div id="ed_change" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Move" hidden>
+            <div id="ed_move" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Lay" hidden>
+            <div id="ed_lay" class="editor"></div>
+          </div>
+          <div class="editor-wrap" data-pane="Patrol" hidden>
+            <div id="ed_patrol" class="editor"></div>
+          </div>
+
+        </div>
+
+
+        <!-- Card Panel Start -->
+        <div id="botPanel" class="card_panel">
+          <div class="card">
+            <h2>Killa</h2>
+            <img src="../assets/images/tarkov/figurines/killa_fig.webp" alt="">
+          </div>
+          <div class="card">
+            <h2>Reshala</h2>
+            <img src="../assets/images/tarkov/figurines/reshala_fig.webp"
+              alt="">
+          </div>
+          <div class="card">
+            <h2>USEC</h2>
+            <img src="../assets/images/tarkov/figurines/usec_fig.webp" alt="">
+          </div>
+          <div class="card">
+            <h2>Scav</h2>
+            <img src="../assets/images/tarkov/figurines/scav_fig.webp" alt="">
+          </div>
+          <div class="card">
+            <h2>Tagilla</h2>
+            <img src="../assets/images/tarkov/figurines/tagilla_fig.webp"
+              alt="">
+          </div>
+          <div class="card">
+            <h2>Cultist</h2>
+            <img src="../assets/images/tarkov/figurines/cultist_fig.webp"
+              alt="">
+          </div>
+          <div class="card">
+            <h2>Vengeful Killa</h2><img
+              src="https://assets.tarkov.dev/vengeful-killa-portrait.webp">
+          </div>
+
+          <div class="card">
+            <h2>Glukhar</h2>
+            <img src="../assets/images/tarkov/avatar/gluhkar.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Glukhar guard assault</h2>
+            <img src="../assets/images/tarkov/avatar/glukhar-guard-assault.webp"
+              alt="">
+          </div>
+
+          <div class="card">
+            <h2>Glukhar guard scout</h2>
+            <img src="../assets/images/tarkov/avatar/glukhar-guard-scout.webp"
+              alt="">
+          </div>
+
+          <div class="card">
+            <h2>Glukhar guard security</h2>
+            <img
+              src="../assets/images/tarkov/avatar/glukhar-guard-security.webp"
+              alt="">
+          </div>
+
+          <div class="card">
+            <h2>Knight</h2>
+            <img src="../assets/images/tarkov/avatar/knight.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Big Pipe</h2>
+            <img src="../assets/images/tarkov/avatar/big-pipe.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Birdeye</h2>
+            <img src="../assets/images/tarkov/avatar/birdeye.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Sanitar</h2>
+            <img src="../assets/images/tarkov/avatar/sanitar.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Sanitar guard</h2>
+            <img src="../assets/images/tarkov/avatar/guard.webp" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Kaban</h2>
+            <img src="../assets/images/tarkov/avatar/kaban.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Basmach</h2>
+            <img src="../assets/images/tarkov/avatar/basmach.webp" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Gus</h2>
+            <img src="../assets/images/tarkov/avatar/gus.webp" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Kaban guard</h2>
+            <img src="../assets/images/tarkov/avatar/kaban-guard.webp" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Kaban sniper</h2>
+            <img src="../assets/images/tarkov/avatar/kaban-guard-sniper.webp"
+              alt="">
+          </div>
+
+          <div class="card">
+            <h2>Shturman</h2>
+            <img src="../assets/images/tarkov/avatar/shturman.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Shturman guard</h2>
+            <img src="../assets/images/tarkov/avatar/shturman-guard.webp"
+              alt="">
+          </div>
+
+          <div class="card">
+            <h2>Partisan</h2>
+            <img src="../assets/images/tarkov/avatar/partisan.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Zryachiy</h2>
+            <img src="../assets/images/tarkov/avatar/zryachiy.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Kollontay</h2>
+            <img src="../assets/images/tarkov/avatar/kollontay.png" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Kollontay guard</h2>
+            <img src="../assets/images/tarkov/avatar/npc.webp" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Raider</h2>
+            <img src="../assets/images/tarkov/avatar/raider.webp" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Rogue</h2>
+            <img src="../assets/images/tarkov/avatar/rogue.webp" alt="">
+          </div>
+
+          <div class="card">
+            <h2></h2>
+            <img src="../assets/images/tarkov/avatar/" alt="">
+          </div>
+
+          <div class="card">
+            <h2></h2>
+            <img src="../assets/images/tarkov/avatar/" alt="">
+          </div>
+        </div>
+
+
+      </section>
+
+    </main>
+
+    <footer>
+      <p>Created by: ohs-dev<br>
+        Source: <a
+          href="https://github.com/ohs-dev/spt-config.git">https://github.com/ohs-dev/spt-config.git</a>
+      </p>
+    </footer>
+
+  </div>
+
+
+  <!-- <script src="./BotConfig.js" type="module"> -->
+  </script>
+</body>
+
+
+
+
+</html>
