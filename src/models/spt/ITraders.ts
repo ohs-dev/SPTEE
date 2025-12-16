@@ -2,6 +2,46 @@ import { type IItem } from "./IItem.js";
 //import { DogtagExchangeSide } from "@spt/models/enums/DogtagExchangeSide";
 //import { ITraderServiceModel } from "@spt/models/spt/services/ITraderServiceModel";
 
+export type TTraderDict = {
+  [id: string]: TTrader;
+}
+
+export type TTrader = {
+  NickName: string;
+  FullName?: string;
+  Description?: string;
+  Quests?: [id: string];
+  base?: ITraderBase;
+  assort?: ITraderAssort;
+  // found in /configs/trader.json
+  updateTime?: TUpdateTime;
+}
+
+/* /configs/traders.json (4 space tab-length)
+{
+  "updateTime": [
+    {
+      "_name": "prapor",
+      "traderId": "54cb50c76803fa8b248b4571",
+      "seconds": {
+        "min": 7000,
+        "max": 13500
+      }
+    },
+    ...
+  ],
+  ...
+  // Also fence refresh settings
+}
+*/
+
+export type TUpdateTime = {
+  seconds: {
+    min: number;
+    max: number;
+  }
+}
+
 export enum DogtagExchangeSide {
   USEC = "Usec",
   BEAR = "Bear",
@@ -11,9 +51,9 @@ export enum DogtagExchangeSide {
 export interface ITrader {
   assort?: ITraderAssort;
   base: ITraderBase;
-  dialogue?: Record<string, string[]>;
+  //dialogue?: Record<string, string[]>;
   questassort?: Record<string, Record<string, string>>;
-  suits?: ISuit[];
+  //suits?: ISuit[];
   //services?: ITraderServiceModel[];
 }
 
@@ -101,7 +141,7 @@ export interface IBarterScheme {
   side?: DogtagExchangeSide;
 }
 
-export interface ISuit {
+/* export interface ISuit {
   _id: string;
   externalObtain: boolean;
   internalObtain: boolean;
@@ -121,7 +161,7 @@ export interface ISuitRequirements {
   questRequirements: string[];
   itemRequirements: ItemRequirement[];
   requiredTid: string;
-}
+} */
 
 export interface ItemRequirement {
   count: number;

@@ -1,7 +1,9 @@
 import * as fs from 'node:fs';
 import { BaseClasses } from './models/enums/BaseClasses';
 import { ITemplateItem } from './models/spt/ITemplateItem';
-import type { Items, ItemRef, ItemRefList, ILocaleInfo } from './models/spt/IItemRef';
+import type { TLocaleDict, TItemRef, TItemRefDict, ILocaleInfo } from './models/spt/IItemRef';
+import type { TTraderDict, TTrader } from './models/spt/ITraders';
+
 
 const TraderIdMap = new Map<string, string>();
 TraderIdMap.set("54cb50c76803fa8b248b4571", "Prapor");
@@ -16,6 +18,7 @@ TraderIdMap.set("638f541a29ffd1183d187f57", "Lightkeeper");
 TraderIdMap.set("656f0f98d80a697f855d34b1", "BTR Driver");
 TraderIdMap.set("6617beeaa9cfa777ca915b7c", "Ref");
 
+
 // Loads Template Items
 export function loadItems(itemPath: string) {
   console.log('Importing items...');
@@ -25,24 +28,10 @@ export function loadItems(itemPath: string) {
     return null;
   }
 
+
   const itemMap: Map<string, ITemplateItem | unknown> = new Map();
-  //const ItemCategories: Map<string, string> = new Map();
-
   const items = JSON.parse(fs.readFileSync(itemPath, 'utf-8'));
-  //const items = Object.keys(json);
-
-  /* 
-  interface ITemplateItem {
-    _id: string;
-    _name: string;
-    _parent: string;
-    _type: ItemType;
-    _props: IProps;
-    _proto?: string;
-  }
-  */
-
-  const itemRefs: ItemRefList = {};
+  const itemRefs: TItemRefDict = {};
 
   for (const item of Object.keys(items)) {
 
@@ -77,9 +66,8 @@ export function loadLocaleInfo(localePath: string) {
     console.log(`Could not find locale data at : (${localePath})`)
   }
 
-  //const localeIdMap: Map<string, ILocaleInfo> = new Map();
-  const localeEntries: Items = {};
-
+  const localeIdMap: Map<string, ILocaleInfo> = new Map();
+  const localeEntries: TLocaleDict = {};
   const data = JSON.parse(fs.readFileSync(localePath, 'utf-8'));
 
   // The data in the locale file contains lots of garbage.
@@ -107,54 +95,63 @@ export function loadLocaleInfo(localePath: string) {
           ShortName: "",
           Description: ""
         }
-        /* localeIdMap.set(id, {
+        localeIdMap.set(id, {
           Name: "",
           ShortName: "",
           Description: ""
-        }); */
+        });
       }
 
       switch (normalizedProperty) {
         case "Name":
           localeEntries[id].Name = data[key];
-          //localeIdMap.set(id, data[key] as ILocaleInfo)
+          localeIdMap.set(id, data[key] as ILocaleInfo)
           break;
         case "ShortName":
           localeEntries[id].ShortName = data[key];
-          //localeIdMap.set(id, data[key] as ILocaleInfo)
+          localeIdMap.set(id, data[key] as ILocaleInfo)
           break;
         case "Description":
           localeEntries[id].Description = data[key];
-          //localeIdMap.set(id, data[key] as ILocaleInfo)
+          localeIdMap.set(id, data[key] as ILocaleInfo)
           break;
       }
-
-      //cnt++;
-      //if (cnt > 60) break;
     }
   }
 
   console.log(`Locale Items Pre Removal : (${Object.keys(localeEntries).length})`);
 
-  /* for (const keyid of localeIdMap.entries()) {
+  for (const keyid of localeIdMap.entries()) {
     if (keyid[1].Name === "" && keyid[1].ShortName === '') {
       localeIdMap.delete(keyid[0]);
     }
-  } */
+  }
 
   for (const id of Object.keys(localeEntries)) {
     if (localeEntries[id] && !localeEntries[id].Name && !localeEntries[id].ShortName) {
-      console.log(`Removing : (${id}) Name:${localeEntries[id].Name} ShortName:${localeEntries[id].ShortName}`)
+      //console.log(`Removing : (${id}) Name:${localeEntries[id].Name} ShortName:${localeEntries[id].ShortName}`)
       delete localeEntries[id];
     }
   }
 
-  //console.log('localeIdMap size : ', localeIdMap.size);
+  console.log('localeIdMap size : ', localeIdMap.size);
   console.log(`localeEntries size : ${Object.keys(localeEntries).length}`);
 
   console.log('writing localeEntries file...');
   fs.writeFileSync('./localeEntries.json', JSON.stringify(localeEntries, null, 2), "utf-8");
   console.log('write complete!');
+
+  // TODO: REMOVE
+  //  customisationStorage.json
+  //  customization.json
+  //  achievements.json
+  //  character.json  -  [string_id, string_id, string_id, ...]
+
+  // TODO: SEPARATE
+  //  quests.json
+  //  items.json
+  //  prices.json
+  //  
 
   return localeEntries;
 }
@@ -172,7 +169,47 @@ export function xrefLocaleItems(templateItems: ITemplateItem[], localeItems: ILo
 
 export function loadTraderInfo() {
 
+  const traders: TTraderDict = {};
 
+  traders["54cb50c76803fa8b248b4571"].NickName = "Prapor";
+  traders["54cb57776803fa99248b456e"].NickName = "Therapist";
+  traders["579dc571d53a0658a154fbec"].NickName = "Fence";
+  traders["58330581ace78e27b8b10cee"].NickName = "Skier";
+  traders["5935c25fb3acc3127c3d8cd9"].NickName = "Peacekeeper";
+  traders["5a7c2eca46aef81a7ca2145d"].NickName = "Mechanic";
+  traders["5ac3b934156ae10c4430e83c"].NickName = "Ragman";
+  traders["5c0647fdd443bc2504c2d371"].NickName = "Jaeger";
+  traders["638f541a29ffd1183d187f57"].NickName = "Lightkeeper";
+  traders["656f0f98d80a697f855d34b1"].NickName = "BTR Driver";
+  traders["6617beeaa9cfa777ca915b7c"].NickName = "Ref";
+
+  return traders;
+}
+
+export function localizeTraders(traderDict: TTraderDict, localeDict: TLocaleDict) {
+
+}
+
+export function loadQuests(path: string) {
+  // Quests location: /database/templates/quests.json
+
+  //   Other quests location:  /traders/id_string/questassort.json 
+  //     don't make sense because they can be from other traders???  
+  //     Maybe they are unlock conditions??
+
+
+  if (!fs.existsSync(path)) {
+    console.log(`Could not find quest templates file at : (${path})`);
+    process.exit(1);
+  }
+
+  const data = JSON.parse(fs.readFileSync(path, 'utf-8'));
+
+  
+
+}
+
+export function localizeQuests() {
 
 }
 

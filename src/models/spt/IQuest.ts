@@ -1,21 +1,34 @@
-import { type IReward } from "./IReward.js";
-import { type QuestStatus } from "../enums/QuestStatus.js";
-import { type QuestTypeEnum } from "../enums/QuestType.js";
+//import { type IReward } from "./IReward";
+import { type QuestStatus } from "../enums/QuestStatus";
+import { type QuestTypeEnum } from "../enums/QuestType";
+import type { RewardType } from "../enums/RewardType";
+import type { IItem } from "./IItem";
+
+export type TQuestDict = {
+  [id: string]: IQuest;
+}
 
 export interface IQuest {
   /** SPT addition - human readable quest name */
   QuestName?: string;
   _id: string;
   canShowNotificationsInGame: boolean;
+  // AvailableForStart: [{..}] | AvailableForFinish: [{..}] | Fail: []
   conditions: IQuestConditionTypes;
   description: string;
   failMessageText: string;
-  name: string;
-  note: string;
+  name: string;   // not useful
+  note: string;   // not useful
+  // the trader who assigns the quest
   traderId: string;
+  // map(s) where the quest can be completed
+  // [ any | map_id_string ]
   location: string;
   image: string;
+  // PickUp | Eliminination | Completion | Discover | WeaponAssembly
+  //   | Loyalty | Exploration | Multi | Skill | Merchant | Standing
   type: QuestTypeEnum;
+  // always false?
   isKey: boolean;
   restartable: boolean;
   instantComplete: boolean;
@@ -26,8 +39,9 @@ export interface IQuest {
   declinePlayerMessage: string;
   completePlayerMessage?: string;
   templateId?: string;
-  rewards: IQuestRewards;
+  //rewards: IQuestRewards;
   /** Becomes 'AppearStatus' inside client */
+  // 0 | 
   status?: string | number;
   KeyQuest?: boolean;
   changeQuestMessageText: string;
@@ -53,14 +67,17 @@ export interface IQuestConditionTypes {
 export interface IQuestCondition {
   id: string;
   index?: number;
+  // ">="
   compareMethod?: string;
   dynamicLocale: boolean;
   visibilityConditions?: IVisibilityCondition[];
   globalQuestCounterId?: string;
   parentId?: string;
+  // item or quest id.  Item ids tend to be in [..] in AvailableForFinish
   target?: string[] | string;
   value?: string | number;
   type?: boolean | string;
+  // 4 | 5
   status?: QuestStatus[];
   availableAfter?: number;
   dispersion?: number;
@@ -79,6 +96,7 @@ export interface IQuestCondition {
   countInRaid?: boolean;
   completeInSeconds?: number;
   isEncoded?: boolean;
+  // Level | 
   conditionType?: string;
 }
 
@@ -110,6 +128,7 @@ export interface IQuestConditionCounterCondition {
   status?: string[];
   bodyPart?: string[];
   daytime?: IDaytimeCounter;
+  // FindItem | HandoverItem
   conditionType?: string;
   enemyHealthEffects?: IEnemyHealthEffect[];
   resetOnSessionEnd?: boolean;
@@ -121,6 +140,7 @@ export interface IEnemyHealthEffect {
 }
 
 export interface IValueCompare {
+  // ">="
   compareMethod: string;
   value: number;
 }
@@ -152,4 +172,26 @@ export interface IQuestRewards {
   Fail?: IReward[];
   FailRestartable?: IReward[];
   Expired?: IReward[];
+}
+
+export interface IReward {
+  value?: string | number;
+  id?: string;
+  //illustrationConfig?: any;
+  isHidden?: boolean;
+  type: RewardType;
+  index: number;
+  target?: string;
+  items?: IItem[];
+  loyaltyLevel?: number;
+  /** Hideout area id */
+  traderId?: string;
+  //isEncoded?: boolean;
+  //unknown?: boolean;
+  findInRaid?: boolean;
+  gameMode?: string[];
+  /** Game editions whitelisted to get reward */
+  //availableInGameEditions?: string[];
+  /** Game editions blacklisted from getting reward */
+  //notAvailableInGameEditions?: string[];
 }

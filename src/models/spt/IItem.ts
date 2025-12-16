@@ -15,7 +15,6 @@ export interface IItemBase {
   _props: any;
   _type: string;
   _proto?: any;
-  
 }
 
 export interface IItemLocation {

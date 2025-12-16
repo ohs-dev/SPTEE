@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-import { loadItems, loadLocaleInfo } from './dataBuilder';
+import { loadItems, loadLocaleInfo, loadTraderInfo } from './dataBuilder';
 import { BaseClasses } from './models/enums/BaseClasses';
 
 // System flags
@@ -21,12 +21,10 @@ const dev_templateItems = 'data/database/templates/items.json';
 // TODO: Change user locale option
 let defaultLocale = 'en';
 
-// Map-like generic
-type TItemList = { [k: string]: unknown }
-const ItemsDict: TItemList = {};
+const tradersDict = loadTraderInfo();
+const templateItemsDict = loadItems(loc_templateItems);
 
-const templateItems = loadItems(loc_templateItems);
-const localeInfo = loadLocaleInfo(loc_Locale);
+const localeDict = loadLocaleInfo(loc_Locale);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {

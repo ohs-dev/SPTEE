@@ -1,15 +1,5 @@
-export type Items = {
+export type TLocaleDict = {
   [id: string]: ILocaleInfo
-}
-
-export interface ItemRef {
-  id: string;
-  name: string;
-  parent: string;
-}
-
-export type ItemRefList = {
-  [id: string]: ItemRef;
 }
 
 export interface ILocaleInfo {
@@ -17,3 +7,14 @@ export interface ILocaleInfo {
   ShortName: string;
   Description: string;
 }
+
+export type TItemRef = {
+  id: string;
+  name: string;
+  parent: string;
+}
+
+export type TItemRefDict = {
+  [id: string]: TItemRef;
+}
+
