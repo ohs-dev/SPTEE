@@ -1,4 +1,4 @@
-import { type IQuest, type IQuestConditionTypes, type IQuestRewards } from "./IQuest.js";
+import { type IQuest, type IQuestConditionTypes, type IQuestRewards } from "./IQuest";
 
 export interface IRepeatableQuest extends IQuest {
   changeCost: IChangeCost[];

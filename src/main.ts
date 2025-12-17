@@ -1,8 +1,9 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-import { loadItems, loadLocaleInfo, loadTraderInfo } from './dataBuilder';
-import { BaseClasses } from './models/enums/BaseClasses';
+
+// Data imports
+import { loadItemTemplates, loadLocaleInfo, loadTraderTemplates } from './dataBuilder';
 
 // System flags
 const isMac = process.platform === 'darwin';
@@ -21,8 +22,8 @@ const dev_templateItems = 'data/database/templates/items.json';
 // TODO: Change user locale option
 let defaultLocale = 'en';
 
-const tradersDict = loadTraderInfo();
-const templateItemsDict = loadItems(loc_templateItems);
+const tradersDict = loadTraderTemplates();
+const templateItemsDict = loadItemTemplates(loc_templateItems);
 
 const localeDict = loadLocaleInfo(loc_Locale);
 

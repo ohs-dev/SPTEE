@@ -1,7 +1,9 @@
 //import { type IReward } from "./IReward";
 import { type QuestStatus } from "../enums/QuestStatus";
-import { type QuestTypeEnum } from "../enums/QuestType";
-import type { RewardType } from "../enums/RewardType";
+// 2025-12-16: moved QuestTypeEnum to local file.
+//import { type QuestTypeEnum } from "../enums/QuestType";
+// 2025-12-16: moved RewardType to local file.
+//import type { RewardType } from "../enums/RewardType";
 import type { IItem } from "./IItem";
 
 export type TQuestDict = {
@@ -12,13 +14,13 @@ export interface IQuest {
   /** SPT addition - human readable quest name */
   QuestName?: string;
   _id: string;
-  canShowNotificationsInGame: boolean;
+  //canShowNotificationsInGame: boolean;
   // AvailableForStart: [{..}] | AvailableForFinish: [{..}] | Fail: []
   conditions: IQuestConditionTypes;
   description: string;
-  failMessageText: string;
+  //failMessageText: string;
   name: string;   // not useful
-  note: string;   // not useful
+  //note: string;   // not useful
   // the trader who assigns the quest
   traderId: string;
   // map(s) where the quest can be completed
@@ -29,31 +31,33 @@ export interface IQuest {
   //   | Loyalty | Exploration | Multi | Skill | Merchant | Standing
   type: QuestTypeEnum;
   // always false?
-  isKey: boolean;
+  //isKey: boolean;
   restartable: boolean;
-  instantComplete: boolean;
-  secretQuest: boolean;
-  startedMessageText: string;
-  successMessageText: string;
-  acceptPlayerMessage?: string;
-  declinePlayerMessage: string;
-  completePlayerMessage?: string;
-  templateId?: string;
-  //rewards: IQuestRewards;
+  //instantComplete: boolean;
+  // always false
+  //secretQuest: boolean;
+  //startedMessageText: string;
+  //successMessageText: string;
+  //acceptPlayerMessage?: string;
+  //declinePlayerMessage: string;
+  //completePlayerMessage?: string;
+  //templateId?: string;
+  rewards: IQuestRewards;
   /** Becomes 'AppearStatus' inside client */
   // 0 | 
   status?: string | number;
   KeyQuest?: boolean;
-  changeQuestMessageText: string;
+  //changeQuestMessageText: string;
   /** "Pmc" or "Scav" */
   side: string;
-  acceptanceAndFinishingSource: string;
-  progressSource: string;
-  rankingModes: string[];
-  gameModes: string[];
-  arenaLocations: string[];
+  //acceptanceAndFinishingSource: string;
+  // eft | arena (maybe?)
+  //progressSource: string;
+  //rankingModes: string[];
+  //gameModes: string[];
+  //arenaLocations: string[];
   /** Status of quest to player */
-  sptStatus?: QuestStatus;
+  //sptStatus?: QuestStatus;
 }
 
 export interface IQuestConditionTypes {
@@ -194,4 +198,38 @@ export interface IReward {
   //availableInGameEditions?: string[];
   /** Game editions blacklisted from getting reward */
   //notAvailableInGameEditions?: string[];
+}
+
+export enum QuestTypeEnum {
+  PICKUP = "PickUp",
+  ELIMINATION = "Elimination",
+  DISCOVER = "Discover",
+  COMPLETION = "Completion",
+  EXPLORATION = "Exploration",
+  LEVELLING = "Levelling",
+  EXPERIENCE = "Experience",
+  STANDING = "Standing",
+  LOYALTY = "Loyalty",
+  MERCHANT = "Merchant",
+  SKILL = "Skill",
+  MULTI = "Multi",
+  WEAPON_ASSEMBLY = "WeaponAssembly",
+}
+
+export enum RewardType {
+  SKILL = "Skill",
+  EXPERIENCE = "Experience",
+  TRADER_STANDING = "TraderStanding",
+  TRADER_UNLOCK = "TraderUnlock",
+  ITEM = "Item",
+  ASSORTMENT_UNLOCK = "AssortmentUnlock",
+  PRODUCTIONS_SCHEME = "ProductionScheme",
+  TRADER_STANDING_RESET = "TraderStandingReset",
+  TRADER_STANDING_RESTORE = "TraderStandingRestore",
+  STASH_ROWS = "StashRows",
+  ACHIEVEMENT = "Achievement",
+  POCKETS = "Pockets",
+  CUSTOMIZATION_DIRECT = "CustomizationDirect",
+  CUSTOMIZATION_OFFER = "CustomizationOffer",
+  EXTRA_DAILY_QUEST = "ExtraDailyQuest",
 }

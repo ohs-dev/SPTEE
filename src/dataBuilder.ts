@@ -3,6 +3,7 @@ import { BaseClasses } from './models/enums/BaseClasses';
 import { ITemplateItem } from './models/spt/ITemplateItem';
 import type { TLocaleDict, TItemRef, TItemRefDict, ILocaleInfo } from './models/spt/IItemRef';
 import type { TTraderDict, TTrader } from './models/spt/ITraders';
+import { TQuestDict } from './models/spt/IQuest';
 
 
 const TraderIdMap = new Map<string, string>();
@@ -19,8 +20,26 @@ TraderIdMap.set("656f0f98d80a697f855d34b1", "BTR Driver");
 TraderIdMap.set("6617beeaa9cfa777ca915b7c", "Ref");
 
 
+const generateData = async () => {
+
+  console.log('Generating data...')
+
+  // await loadItemTemplates()
+  // await loadTraderTemplates()
+  // await loadQuestTemplates()
+  // await loadCustomizationTemplates()
+  // await loadLocationTemplates()
+  // await localizeTemplates()
+
+  // (maybe?) await loadModTemplates()
+
+  console.log(`Finished generating data!`);
+
+}
+
+
 // Loads Template Items
-export function loadItems(itemPath: string) {
+export function loadItemTemplates(itemPath: string) {
   console.log('Importing items...');
 
   if (!fs.existsSync(itemPath)) {
@@ -55,7 +74,6 @@ export function loadItems(itemPath: string) {
 
   return itemRefs;
 }
-
 
 // Loads English translations for game items
 export function loadLocaleInfo(localePath: string) {
@@ -156,18 +174,7 @@ export function loadLocaleInfo(localePath: string) {
   return localeEntries;
 }
 
-export function xrefLocaleItems(templateItems: ITemplateItem[], localeItems: ILocaleInfo[]) {
-
-
-  for (const t_item of templateItems) {
-    if (t_item['_id'] in localeItems) {
-      // match
-
-    }
-  }
-}
-
-export function loadTraderInfo() {
+export function loadTraderTemplates() {
 
   const traders: TTraderDict = {};
 
@@ -186,11 +193,7 @@ export function loadTraderInfo() {
   return traders;
 }
 
-export function localizeTraders(traderDict: TTraderDict, localeDict: TLocaleDict) {
-
-}
-
-export function loadQuests(path: string) {
+export function loadQuestTemplates(path: string) {
   // Quests location: /database/templates/quests.json
 
   //   Other quests location:  /traders/id_string/questassort.json 
@@ -203,14 +206,64 @@ export function loadQuests(path: string) {
     process.exit(1);
   }
 
-  const data = JSON.parse(fs.readFileSync(path, 'utf-8'));
+  console.log(`Loading quest templates...`);
 
-  
+  const questData = JSON.parse(fs.readFileSync(path, 'utf-8'));
+  const questDict: TQuestDict = {};
+
+  for (const key of Object.keys(questData)) {
+
+    if (key.length !== 24) continue;
+
+    // assign object to quick-lookup dictionary
+    questDict[key] = {
+      // This is only a partial list of keys, for 
+      // faster lookup times
+      QuestName: questData[key]['QuestName'],
+      _id: questData[key]['_id'],
+      conditions: questData[key]['conditions'],
+      description: questData[key]['description'],
+      image: questData[key]['image'],
+      location: questData[key]['location'],
+      name: questData[key]['name'],
+      restartable: questData[key]['restartable'],
+      rewards: questData[key]['rewards'],
+      side: questData[key]['side'],
+      status: questData[key]['status'],
+      traderId: questData[key]['traderId'],
+      type: questData[key]['type']
+    };
+
+  }
+
+  console.log(`Writing to file: (${Object.keys(questDict)}) quests...`);
+  fs.writeFileSync('./data/QuestTemplateDict.json', JSON.stringify(questDict, null, 2), "utf-8");
+  console.log(`Write complete!`);
+
+  return questDict;
+}
+
+
+
+
+export function localizeItems(templateItems: ITemplateItem[], localeItems: ILocaleInfo[]) {
+
+  for (const t_item of templateItems) {
+    if (t_item['_id'] in localeItems) {
+      // match
+    }
+  }
+}
+
+export function localizeTraders(traderDict: TTraderDict, localeDict: TLocaleDict) {
 
 }
 
-export function localizeQuests() {
+export function localizeQuests(questDict: TQuestDict) {
 
+  for (const key of Object.keys(questDict)) {
+
+  }
 }
 
 /* 
