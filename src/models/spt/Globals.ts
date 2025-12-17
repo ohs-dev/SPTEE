@@ -10,7 +10,6 @@ export interface IGlobals {
   ItemPresets: Record<string, IPreset>;
 }
 
-
 export interface IConfig {
   AimPunchMagnitude: number;
   Aiming: IAiming;
@@ -94,7 +93,6 @@ export interface IConfig {
   StaminaDrain: IStaminaDrain;
   StaminaRestoration: IStaminaRestoration;
   StomachOverdamage: number;  // default 1.5, or 1.3?
-
   //TODSkyDate: string;
   //TeamSearchingTimeout: number;
   //TestValue: number;

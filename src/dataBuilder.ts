@@ -34,9 +34,7 @@ const generateData = async () => {
   // (maybe?) await loadModTemplates()
 
   console.log(`Finished generating data!`);
-
 }
-
 
 // Loads Template Items
 export function loadItemTemplates(itemPath: string) {
@@ -243,7 +241,29 @@ export function loadQuestTemplates(path: string) {
   return questDict;
 }
 
+export function loadPricesTemplate(path: string) {
 
+  if (!fs.existsSync(path)) {
+    console.log(`Could not find prices template file: (${path})`);
+    process.exit(1);
+  }
+
+  const priceData = JSON.parse(fs.readFileSync(path, 'utf-8'));
+
+  // A list of item ids with price
+  const priceDict: { [id: string]: number } = {};
+
+  for (const key of Object.keys(priceData)) {
+
+    // Skip non-valid id strings (if present)
+    if (key.length !== 24) continue;
+    priceDict[key] = priceData[key];
+  }
+
+  // No minification needed, prices.json is already
+  //   small & efficient.
+  return priceDict;
+}
 
 
 export function localizeItems(templateItems: ITemplateItem[], localeItems: ILocaleInfo[]) {
@@ -265,66 +285,3 @@ export function localizeQuests(questDict: TQuestDict) {
 
   }
 }
-
-/* 
-
-export interface Items {
-    [id: string]: ItemDetails;
-}
-
-export interface ItemDetails {
-    Name: string;
-    ShortName: string;
-
-    // Generic
-    Type?: ItemDetailType;
-    DetailLink?: string;
-    Parent?: string;
-    ParentID?: string;
-    ParentDetailLink?: string;
-    FleaBlacklisted?: boolean;
-    QuestItem?: boolean;
-    Weight?: number;
-
-    // Ammo
-    Caliber?: string;
-    Damage?: number;
-    ArmorDamage?: number;
-    PenetrationPower?: number;
-
-    // Traders
-    Currency?: string;
-    UnlockedByDefault?: boolean;
-
-    // Customization Items
-    Description?: string;
-    BodyPart?: string;
-    Sides?: string;
-    IntegratedArmorVest?: boolean;
-    AvailableAsDefault?: boolean;
-    PrefabPath?: string;
-
-    // Locations
-    Id?: string;
-    AirdropChance?: number;
-    EscapeTimeLimit?: number;
-    Insurance?: boolean;
-    BossSpawns?: string;
-
-    // Quests
-    Trader?: string;
-    TraderId?: string;
-    TraderLink?: string;
-    QuestType?: string;
-}
-
-export enum ItemDetailType {
-    ITEM = "Item",
-    AMMO = "Ammo",
-    TRADER = "Trader",
-    CUSTOMIZATION = "Customization",
-    LOCATION = "Location",
-    QUEST = "Quest",
-}
-
-*/

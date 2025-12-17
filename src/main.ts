@@ -3,7 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
 // Data imports
-import { loadItemTemplates, loadLocaleInfo, loadTraderTemplates } from './dataBuilder';
+import { loadItemTemplates, loadLocaleInfo, loadQuestTemplates, loadTraderTemplates } from './dataBuilder';
 
 // System flags
 const isMac = process.platform === 'darwin';
@@ -12,10 +12,10 @@ const isDev = process.env.NODE_ENV !== 'production';
 // SPT data files
 const loc_Locale = path.join(__dirname, "../../data/database/locales/global/en.json");
 const loc_templateItems = path.join(__dirname, "../../data/database/templates/items.json");
-const loc_traders_dir = path.join(__dirname, "./data/database/traders/");
-const loc_locations_dir = path.join(__dirname, "./data/database/locations/");
-const loc_quests = path.join(__dirname, "./data/database/templates/quests.json");
-const loc_prices = path.join(__dirname, './data/database/templates/prices.json');
+const loc_traders_dir = path.join(__dirname, "../../data/database/traders/");
+const loc_locations_dir = path.join(__dirname, "../../data/database/locations/");
+const loc_quests = path.join(__dirname, "../../data/database/templates/quests.json");
+const loc_prices = path.join(__dirname, '../../data/database/templates/prices.json');
 
 const dev_templateItems = 'data/database/templates/items.json';
 
@@ -24,6 +24,7 @@ let defaultLocale = 'en';
 
 const tradersDict = loadTraderTemplates();
 const templateItemsDict = loadItemTemplates(loc_templateItems);
+const questDict = loadQuestTemplates(loc_quests);
 
 const localeDict = loadLocaleInfo(loc_Locale);
 
