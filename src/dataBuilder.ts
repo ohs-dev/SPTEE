@@ -8,7 +8,7 @@ import { TQuestDict } from './models/spt/IQuest';
 import { ETraders } from './models/enums/Traders';
 import path from 'node:path';
 
-const TraderIdMap = new Map<string, string>();
+/* const TraderIdMap = new Map<string, string>();
 TraderIdMap.set("54cb50c76803fa8b248b4571", "Prapor");
 TraderIdMap.set("54cb57776803fa99248b456e", "Therapist");
 TraderIdMap.set("579dc571d53a0658a154fbec", "Fence");
@@ -19,7 +19,7 @@ TraderIdMap.set("5ac3b934156ae10c4430e83c", "Ragman");
 TraderIdMap.set("5c0647fdd443bc2504c2d371", "Jaeger");
 TraderIdMap.set("638f541a29ffd1183d187f57", "Lightkeeper");
 TraderIdMap.set("656f0f98d80a697f855d34b1", "BTR Driver");
-TraderIdMap.set("6617beeaa9cfa777ca915b7c", "Ref");
+TraderIdMap.set("6617beeaa9cfa777ca915b7c", "Ref"); */
 
 const TraderIds = [
   ETraders.PRAPOR,
@@ -259,7 +259,7 @@ export function loadLocaleInfo(localePath: string) {
   } */
 
   for (const key of Object.keys(localeItemDict)) {
-    if (localeItemDict[key].Name === "") {
+    if (localeItemDict[key].Name === "" || localeItemDict[key].ShortName === "") {
       delete localeItemDict[key];
     }
   }
@@ -309,144 +309,17 @@ export function loadLocaleInfo(localePath: string) {
 export function loadTraderTemplates() {
 
   const traders: TTraderDict = {};
-
-  traders["54cb50c76803fa8b248b4571"] = {
-    nickname: "Prapor",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["54cb57776803fa99248b456e"] = {
-    nickname: "Therapist",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["579dc571d53a0658a154fbec"] = {
-    nickname: "Fence",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["58330581ace78e27b8b10cee"] = {
-    nickname: "Skier",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["5935c25fb3acc3127c3d8cd9"] = {
-    nickname: "Peacekeeper",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["5a7c2eca46aef81a7ca2145d"] = {
-    nickname: "Mechanic",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["5ac3b934156ae10c4430e83c"] = {
-    nickname: "Ragman",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["5c0647fdd443bc2504c2d371"] = {
-    nickname: "Jaeger",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["638f541a29ffd1183d187f57"] = {
-    nickname: "Lightkeeper",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["656f0f98d80a697f855d34b1"] = {
-    nickname: "BTR Driver",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-  traders["6617beeaa9cfa777ca915b7c"] = {
-    nickname: "Ref",
-    name: "",
-    description: "",
-    quests: [],
-    updateTime: {
-      seconds: {
-        min: 0,
-        max: 0
-      }
-    }
-  }
-
-  return traders;
-}
-
-function loadTraderBase(traders: TTraderDict) {
+  traders[ETraders.PRAPOR] = { nickname: "Prapor", }
+  traders[ETraders.THERAPIST] = { nickname: "Therapist", }
+  traders[ETraders.FENCE] = { nickname: "Fence", }
+  traders[ETraders.SKIER] = { nickname: "Skier", }
+  traders[ETraders.PEACEKEEPER] = { nickname: "Peacekeeper", }
+  traders[ETraders.MECHANIC] = { nickname: "Mechanic", }
+  traders[ETraders.RAGMAN] = { nickname: "Ragman", }
+  traders[ETraders.JAEGER] = { nickname: "Jaeger", }
+  traders[ETraders.LIGHTHOUSEKEEPER] = { nickname: "Lightkeeper", }
+  traders[ETraders.BTR] = { nickname: "BTR Driver", }
+  traders[ETraders.REF] = { nickname: "Ref", }
 
   const t_dir = '../../data/database/traders/';
 
@@ -462,17 +335,19 @@ function loadTraderBase(traders: TTraderDict) {
   const skie_base = `${ETraders.SKIER}/base.json`;
   const ref_base = `${ETraders.REF}/base.json`
 
-  traders[ETraders.PRAPOR].base = JSON.parse(fs.readFileSync(path.join(t_dir, prap_base), 'utf-8'));
-  traders[ETraders.THERAPIST].base = JSON.parse(fs.readFileSync(path.join(t_dir, ther_base), 'utf-8'));
-  traders[ETraders.MECHANIC].base = JSON.parse(fs.readFileSync(path.join(t_dir, mech_base), 'utf-8'));
-  traders[ETraders.JAEGER].base = JSON.parse(fs.readFileSync(path.join(t_dir, jaeg_base), 'utf-8'));
-  traders[ETraders.RAGMAN].base = JSON.parse(fs.readFileSync(path.join(t_dir, ragm_base), 'utf-8'));
-  traders[ETraders.PEACEKEEPER].base = JSON.parse(fs.readFileSync(path.join(t_dir, peac_base), 'utf-8'));
-  traders[ETraders.FENCE].base = JSON.parse(fs.readFileSync(path.join(t_dir, fenc_base), 'utf-8'));
-  traders[ETraders.BTR].base = JSON.parse(fs.readFileSync(path.join(t_dir, btr_base), 'utf-8'));
-  traders[ETraders.LIGHTHOUSEKEEPER].base = JSON.parse(fs.readFileSync(path.join(t_dir, ligh_base), 'utf-8'));
-  traders[ETraders.SKIER].base = JSON.parse(fs.readFileSync(path.join(t_dir, skie_base), 'utf-8'));
-  traders[ETraders.REF].base = JSON.parse(fs.readFileSync(path.join(t_dir, ref_base), 'utf-8'));
+  traders[ETraders.PRAPOR].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, prap_base), 'utf-8'));
+  traders[ETraders.THERAPIST].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, ther_base), 'utf-8'));
+  traders[ETraders.MECHANIC].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, mech_base), 'utf-8'));
+  traders[ETraders.JAEGER].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, jaeg_base), 'utf-8'));
+  traders[ETraders.RAGMAN].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, ragm_base), 'utf-8'));
+  traders[ETraders.PEACEKEEPER].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, peac_base), 'utf-8'));
+  traders[ETraders.FENCE].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, fenc_base), 'utf-8'));
+  traders[ETraders.BTR].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, btr_base), 'utf-8'));
+  traders[ETraders.LIGHTHOUSEKEEPER].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, ligh_base), 'utf-8'));
+  traders[ETraders.SKIER].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, skie_base), 'utf-8'));
+  traders[ETraders.REF].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, ref_base), 'utf-8'));
+
+  return traders;
 }
 
 export function loadQuestTemplates(path: string) {

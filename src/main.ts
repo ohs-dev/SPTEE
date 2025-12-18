@@ -23,14 +23,13 @@ const dev_templateItems = 'data/database/templates/items.json';
 // TODO: Change user locale option
 let defaultLocale = 'en';
 
-//const tradersDict = loadTraderTemplates();
-//const templateItemsDict = loadItemTemplates(loc_templateItems);
-//const questDict = loadQuestTemplates(loc_quests);
-//const prices = loadPricesTemplate(loc_prices);
-
+const traders = loadTraderTemplates();
+const templateItems = loadItemTemplates(loc_templateItems);
+const questDict = loadQuestTemplates(loc_quests);
+const prices = loadPricesTemplate(loc_prices);
 const handbook = loadHandbook(loc_handbook);
-
 loadLocaleInfo(loc_Locale);
+
 //const localeDict = loadLocaleInfo(loc_Locale);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
