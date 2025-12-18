@@ -1,16 +1,14 @@
 import { type IItem } from "./IItem.js";
-//import { DogtagExchangeSide } from "@spt/models/enums/DogtagExchangeSide";
-//import { ITraderServiceModel } from "@spt/models/spt/services/ITraderServiceModel";
 
 export type TTraderDict = {
   [id: string]: TTrader;
 }
 
 export type TTrader = {
-  NickName: string;
-  FullName?: string;
-  Description?: string;
-  Quests?: [id: string];
+  nickname?: string;
+  name?: string;
+  description?: string;
+  quests?: string[];
   base?: ITraderBase;
   assort?: ITraderAssort;
   // found in /configs/trader.json
@@ -48,46 +46,46 @@ export enum DogtagExchangeSide {
   ANY = "Any",
 }
 
-export interface ITrader {
+/* export interface ITrader {
   assort?: ITraderAssort;
   base: ITraderBase;
   //dialogue?: Record<string, string[]>;
   questassort?: Record<string, Record<string, string>>;
   //suits?: ISuit[];
   //services?: ITraderServiceModel[];
-}
+} */
 
 export interface ITraderBase {
-  refreshTraderRagfairOffers: boolean;
   _id: string;
   availableInRaid: boolean;
   avatar: string;
   balance_dol: number;
   balance_eur: number;
   balance_rub: number;
-  buyer_up: boolean;
+  buyer_up?: boolean;
   currency: string;
-  customization_seller: boolean;
-  discount: number;
-  discount_end: number;
-  gridHeight: number;
+  customization_seller?: boolean;
+  discount?: number;
+  discount_end?: number;
+  gridHeight?: number;
   sell_modifier_for_prohibited_items?: number;
   insurance: ITraderInsurance;
   items_buy: IItemBuyData;
-  items_buy_prohibited: IItemBuyData;
+  items_buy_prohibited?: IItemBuyData;
   isCanTransferItems?: boolean;
   transferableItems?: IItemBuyData;
   prohibitedTransferableItems?: IItemBuyData;
-  location: string;
+  location?: string;
   loyaltyLevels: ITraderLoyaltyLevel[];
   medic: boolean;
   name: string;
-  nextResupply: number;
+  nextResupply?: number;
   nickname: string;
   repair: ITraderRepair;
   sell_category: string[];
-  surname: string;
+  surname?: string;
   unlockedByDefault: boolean;
+  refreshTraderRagfairOffers?: boolean;
 }
 
 export interface IItemBuyData {
@@ -121,7 +119,7 @@ export interface ITraderRepair {
   currency_coefficient: number;
   excluded_category: string[];
   /** Doesn't exist in client object */
-  excluded_id_list: string[];
+  excluded_id_list?: string[];
   quality: number;
 }
 
@@ -161,7 +159,7 @@ export interface ISuitRequirements {
   questRequirements: string[];
   itemRequirements: ItemRequirement[];
   requiredTid: string;
-} */
+} 
 
 export interface ItemRequirement {
   count: number;
@@ -169,4 +167,4 @@ export interface ItemRequirement {
   id: string;
   onlyFunctional: boolean;
   type: string;
-}
+} */

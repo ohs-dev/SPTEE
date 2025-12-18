@@ -3,7 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
 // Data imports
-import { loadItemTemplates, loadLocaleInfo, loadQuestTemplates, loadTraderTemplates } from './dataBuilder';
+import { loadItemTemplates, loadLocaleInfo, loadPricesTemplate, loadQuestTemplates, loadTraderTemplates } from './dataBuilder';
 
 // System flags
 const isMac = process.platform === 'darwin';
@@ -22,11 +22,13 @@ const dev_templateItems = 'data/database/templates/items.json';
 // TODO: Change user locale option
 let defaultLocale = 'en';
 
-const tradersDict = loadTraderTemplates();
-const templateItemsDict = loadItemTemplates(loc_templateItems);
-const questDict = loadQuestTemplates(loc_quests);
+//const tradersDict = loadTraderTemplates();
+//const templateItemsDict = loadItemTemplates(loc_templateItems);
+//const questDict = loadQuestTemplates(loc_quests);
+//const prices = loadPricesTemplate(loc_prices);
 
-const localeDict = loadLocaleInfo(loc_Locale);
+loadLocaleInfo(loc_Locale);
+//const localeDict = loadLocaleInfo(loc_Locale);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {

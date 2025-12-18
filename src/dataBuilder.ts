@@ -1,10 +1,12 @@
 import * as fs from 'node:fs';
 import { BaseClasses } from './models/enums/BaseClasses';
 import { ITemplateItem } from './models/spt/ITemplateItem';
-import type { TLocaleDict, TItemRef, TItemRefDict, ILocaleInfo } from './models/spt/IItemRef';
+import type { TItemRef, TItemRefDict } from './models/spt/IItemRef';
+import type { TLocaleItem, TLocaleItemDict, TLocaleQuestDict, TLocaleStringDict, TLocaleTraderDict } from './models/spt/ILocale';
 import type { TTraderDict, TTrader } from './models/spt/ITraders';
 import { TQuestDict } from './models/spt/IQuest';
-
+import { ETraders } from './models/enums/Traders';
+import path from 'node:path';
 
 const TraderIdMap = new Map<string, string>();
 TraderIdMap.set("54cb50c76803fa8b248b4571", "Prapor");
@@ -19,6 +21,19 @@ TraderIdMap.set("638f541a29ffd1183d187f57", "Lightkeeper");
 TraderIdMap.set("656f0f98d80a697f855d34b1", "BTR Driver");
 TraderIdMap.set("6617beeaa9cfa777ca915b7c", "Ref");
 
+const TraderIds = [
+  ETraders.PRAPOR,
+  ETraders.THERAPIST,
+  ETraders.FENCE,
+  ETraders.JAEGER,
+  ETraders.MECHANIC,
+  ETraders.RAGMAN,
+  ETraders.PEACEKEEPER,
+  ETraders.SKIER,
+  ETraders.BTR,
+  ETraders.LIGHTHOUSEKEEPER,
+  ETraders.REF
+]
 
 const generateData = async () => {
 
@@ -66,8 +81,8 @@ export function loadItemTemplates(itemPath: string) {
   console.log(`Item Map : (${itemMap.size})`);
   console.log(`Item Refs : (${Object.keys(itemRefs).length})`);
 
-  console.log('writing ItemRefs file...');
-  fs.writeFileSync('./ItemRefs.json', JSON.stringify(itemRefs, null, 2), "utf-8");
+  console.log('writing Item Templates file...');
+  fs.writeFileSync('./data/ItemTemplateDict.json', JSON.stringify(itemRefs, null, 2), "utf-8");
   console.log('write complete!');
 
   return itemRefs;
@@ -82,113 +97,382 @@ export function loadLocaleInfo(localePath: string) {
     console.log(`Could not find locale data at : (${localePath})`)
   }
 
-  const localeIdMap: Map<string, ILocaleInfo> = new Map();
-  const localeEntries: TLocaleDict = {};
-  const data = JSON.parse(fs.readFileSync(localePath, 'utf-8'));
+  // TESTING DATA-TYPES
+  //const localeDict: { [id: string]: TLocaleItem } = {};
 
-  // The data in the locale file contains lots of garbage.
-  // It has to be sorted for things that are useful to us.
+  const localeItemDict: TLocaleItemDict = {};
+  const localeTraderDict: TLocaleTraderDict = {};
+  const localeQuestDict: TLocaleQuestDict = {};
+  const localeStringDict: TLocaleStringDict = {};
+
+  //const localeIdMap: Map<string, TLocaleItem> = new Map();
+
+  // Sort through file data
+  const data = JSON.parse(fs.readFileSync(localePath, 'utf-8'));
   for (const key of Object.keys(data)) {
 
     // If key value is empty, skip
     if (data['key'] === '') continue;
 
     if (key.length > 24) {
+      // Key contains compound property names
 
       const parts = key.split(" ");
       const [id, property] = parts;
 
       // Skip non-valid ids
       if (id.length !== 24) continue;
-      // Skip trader ids
-      if (id in TraderIdMap) continue;
+      //if (id in TraderIdMap) continue;  // Skip trader ids
 
-      const normalizedProperty = property.charAt(0).toUpperCase() + property.slice(1);
 
-      if (!localeEntries[id]) {
-        localeEntries[id] = {
-          Name: "",
-          ShortName: "",
-          Description: ""
-        }
-        localeIdMap.set(id, {
-          Name: "",
-          ShortName: "",
-          Description: ""
-        });
-      }
+      // Standardize property names, `Capitalized`
+      //const normalizedProperty = property.charAt(0).toUpperCase() + property.slice(1);
 
-      switch (normalizedProperty) {
+
+      // There are many possible property names in the locale file:
+      //
+      //   * Items *   :  Name | ShortName | Description.
+      //
+      //   * Traders * :  FullName | Nickname | FirstName | Location | Description
+      //
+      //   * Quests *  :  name | acceptPlayerMessage | completePlayerMessage | 
+      //                  declinePlayerMessage | failMessageText | successMessageText |
+      //                  description
+      //
+      //   * Task *    :  (none) | 0 | 1 | 2 | 3
+      //
+      switch (property) {
         case "Name":
-          localeEntries[id].Name = data[key];
-          localeIdMap.set(id, data[key] as ILocaleInfo)
+          //localeEntries[id].Name = data[key];
+          //localeIdMap.get(id).Name = data[key];
+          localeItemDict[id].Name = data[key];
           break;
         case "ShortName":
-          localeEntries[id].ShortName = data[key];
-          localeIdMap.set(id, data[key] as ILocaleInfo)
+          //localeEntries[id].ShortName = data[key];
+          //localeIdMap.get(id).ShortName = data[key];
+          localeItemDict[id].ShortName = data[key];
           break;
         case "Description":
-          localeEntries[id].Description = data[key];
-          localeIdMap.set(id, data[key] as ILocaleInfo)
+          //localeEntries[id].Description = data[key];
+          //localeIdMap.get(id).Description = data[key];
+          if (id in TraderIds) {
+            if (!localeTraderDict[id]) {
+              localeTraderDict[id] = {};
+            }
+            localeTraderDict[id].Description = data[key];
+          } else {
+            if (!localeItemDict[id]) {
+              localeItemDict[id] = {};
+            }
+            localeItemDict[id].Description = data[key];
+          }
+          break;
+        /** Quest Section */
+        case "name":
+          if (!localeQuestDict[id]) {
+            localeQuestDict[id] = {}
+          }
+          localeQuestDict[id].name = data[key];
+          break;
+        case "description":
+          if (!localeQuestDict[id]) {
+            localeQuestDict[id] = {};
+          }
+          localeQuestDict[id].description = data[key];
+          break;
+        case "successMessageText":
+          if (!localeQuestDict[id]) {
+            localeQuestDict[id] = {}
+          }
+          localeQuestDict[id].successMessageText = data[key];
+          break;
+        case "failMessageText":
+          if (!localeQuestDict[id]) {
+            localeQuestDict[id] = {}
+          }
+          localeQuestDict[id].failMessageText = data[key];
+          break;
+        case "acceptPlayerMessage":
+          if (!localeQuestDict[id]) {
+            localeQuestDict[id] = {};
+          }
+          localeQuestDict[id].acceptPlayerMessage = data[key];
+          break;
+        case "completePlayerMessage":
+          if (!localeQuestDict[id]) {
+            localeQuestDict[id] = {}
+          }
+          localeQuestDict[id].completePlayerMessage = data[key];
+          break;
+        case "declinePlayerMessage":
+          if (!localeQuestDict[id]) {
+            localeQuestDict[id] = {}
+          }
+          localeQuestDict[id].declinePlayerMessage = data[key];
+          break;
+        /** Trader Section */
+        case "Nickname":
+          if (!localeTraderDict[id]) {
+            localeTraderDict[id] = {}
+          }
+          localeTraderDict[id].Nickname = data[key];
+          break;
+        case "FullName":
+          if (!localeTraderDict[id]) {
+            localeTraderDict[id] = {}
+          }
+          localeTraderDict[id].FullName = data[key];
+          break;
+        case "FirstName":
+          if (!localeTraderDict[id]) {
+            localeTraderDict[id] = {}
+          }
+          localeTraderDict[id].FirstName = data[key];
+          break;
+        case "Location":
+          if (!localeTraderDict[id]) {
+            localeTraderDict[id] = {}
+          }
+          localeTraderDict[id].Location = data[key];
           break;
       }
+    } else if (key.length === 24) {
+      // key is ONLY an id string
+      localeStringDict[key] = data[key];
     }
   }
 
-  console.log(`Locale Items Pre Removal : (${Object.keys(localeEntries).length})`);
+  //console.log(`Locale Dict items: (${Object.keys(localeDict).length})`);
+  //console.log(`Locale Items Pre Removal : (${Object.keys(localeEntries).length})`);
 
-  for (const keyid of localeIdMap.entries()) {
+  /* for (const keyid of localeIdMap.entries()) {
     if (keyid[1].Name === "" && keyid[1].ShortName === '') {
       localeIdMap.delete(keyid[0]);
     }
-  }
+  } */
 
-  for (const id of Object.keys(localeEntries)) {
+  /* for (const id of Object.keys(localeEntries)) {
     if (localeEntries[id] && !localeEntries[id].Name && !localeEntries[id].ShortName) {
       //console.log(`Removing : (${id}) Name:${localeEntries[id].Name} ShortName:${localeEntries[id].ShortName}`)
       delete localeEntries[id];
     }
+  } */
+
+  for (const key of Object.keys(localeItemDict)) {
+    if (localeItemDict[key].Name === "") {
+      delete localeItemDict[key];
+    }
   }
 
-  console.log('localeIdMap size : ', localeIdMap.size);
-  console.log(`localeEntries size : ${Object.keys(localeEntries).length}`);
+  for (const key of Object.keys(localeQuestDict)) {
+    if (localeQuestDict[key].name === "") {
+      // remove for missing name
+      delete localeQuestDict[key];
+    } else if (localeQuestDict[key].successMessageText === undefined) {
+      // remove for missing quest parameter
+      delete localeQuestDict[key];
+    }
+  }
 
-  console.log('writing localeEntries file...');
-  fs.writeFileSync('./localeEntries.json', JSON.stringify(localeEntries, null, 2), "utf-8");
+  for (const key of Object.keys(localeStringDict)) {
+    if (localeStringDict[key] === "") {
+      delete localeStringDict[key];
+    }
+  }
+  //console.log('localeIdMap size : ', localeIdMap.size);
+  //console.log(`localeEntries size : ${Object.keys(localeEntries).length}`);
+
+  console.log('writing locale files...');
+  //fs.writeFileSync('./data/localeDict.json', JSON.stringify(localeDict, null, 2), "utf-8");
+
+  fs.writeFileSync('./data/localeItemDict.json', JSON.stringify(localeItemDict, null, 2), 'utf-8');
+  fs.writeFileSync('./data/localeQuestDict.json', JSON.stringify(localeQuestDict, null, 2), 'utf-8');
+  fs.writeFileSync('./data/localeTraderDict.json', JSON.stringify(localeTraderDict, null, 2), 'utf-8');
+  fs.writeFileSync('./data/localeStringDict.json', JSON.stringify(localeStringDict, null, 2), 'utf-8');
+
+  console.log(`Items: (${Object.keys(localeItemDict).length})`);
+  console.log(`Traders: (${Object.keys(localeTraderDict).length})`);
+  console.log(`Quests: (${Object.keys(localeQuestDict).length})`);
+  console.log(`Strings: (${Object.keys(localeStringDict).length})`);
+
   console.log('write complete!');
 
   // TODO: REMOVE
   //  customisationStorage.json
   //  customization.json
   //  achievements.json
-  //  character.json  -  [string_id, string_id, string_id, ...]
+  //  character.json  
 
-  // TODO: SEPARATE
-  //  quests.json
-  //  items.json
-  //  prices.json
-  //  
-
-  return localeEntries;
+  //return localeEntries;
 }
 
 export function loadTraderTemplates() {
 
   const traders: TTraderDict = {};
 
-  traders["54cb50c76803fa8b248b4571"].NickName = "Prapor";
-  traders["54cb57776803fa99248b456e"].NickName = "Therapist";
-  traders["579dc571d53a0658a154fbec"].NickName = "Fence";
-  traders["58330581ace78e27b8b10cee"].NickName = "Skier";
-  traders["5935c25fb3acc3127c3d8cd9"].NickName = "Peacekeeper";
-  traders["5a7c2eca46aef81a7ca2145d"].NickName = "Mechanic";
-  traders["5ac3b934156ae10c4430e83c"].NickName = "Ragman";
-  traders["5c0647fdd443bc2504c2d371"].NickName = "Jaeger";
-  traders["638f541a29ffd1183d187f57"].NickName = "Lightkeeper";
-  traders["656f0f98d80a697f855d34b1"].NickName = "BTR Driver";
-  traders["6617beeaa9cfa777ca915b7c"].NickName = "Ref";
+  traders["54cb50c76803fa8b248b4571"] = {
+    nickname: "Prapor",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["54cb57776803fa99248b456e"] = {
+    nickname: "Therapist",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["579dc571d53a0658a154fbec"] = {
+    nickname: "Fence",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["58330581ace78e27b8b10cee"] = {
+    nickname: "Skier",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["5935c25fb3acc3127c3d8cd9"] = {
+    nickname: "Peacekeeper",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["5a7c2eca46aef81a7ca2145d"] = {
+    nickname: "Mechanic",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["5ac3b934156ae10c4430e83c"] = {
+    nickname: "Ragman",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["5c0647fdd443bc2504c2d371"] = {
+    nickname: "Jaeger",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["638f541a29ffd1183d187f57"] = {
+    nickname: "Lightkeeper",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["656f0f98d80a697f855d34b1"] = {
+    nickname: "BTR Driver",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
+  traders["6617beeaa9cfa777ca915b7c"] = {
+    nickname: "Ref",
+    name: "",
+    description: "",
+    quests: [],
+    updateTime: {
+      seconds: {
+        min: 0,
+        max: 0
+      }
+    }
+  }
 
   return traders;
+}
+
+function loadTraderBase(traders: TTraderDict) {
+
+  const t_dir = '../../data/database/traders/';
+
+  const prap_base = `${ETraders.PRAPOR}/base.json`;
+  const ther_base = `${ETraders.THERAPIST}/base.json`;
+  const mech_base = `${ETraders.MECHANIC}/base.json`;
+  const jaeg_base = `${ETraders.JAEGER}/base.json`;
+  const ragm_base = `${ETraders.RAGMAN}/base.json`;
+  const peac_base = `${ETraders.PEACEKEEPER}/base.json`;
+  const fenc_base = `${ETraders.FENCE}/base.json`;
+  const btr_base = `${ETraders.BTR}/base.json`;
+  const ligh_base = `${ETraders.LIGHTHOUSEKEEPER}/base.json`;
+  const skie_base = `${ETraders.SKIER}/base.json`;
+  const ref_base = `${ETraders.REF}/base.json`
+
+  traders[ETraders.PRAPOR].base = JSON.parse(fs.readFileSync(path.join(t_dir, prap_base), 'utf-8'));
+  traders[ETraders.THERAPIST].base = JSON.parse(fs.readFileSync(path.join(t_dir, ther_base), 'utf-8'));
+  traders[ETraders.MECHANIC].base = JSON.parse(fs.readFileSync(path.join(t_dir, mech_base), 'utf-8'));
+  traders[ETraders.JAEGER].base = JSON.parse(fs.readFileSync(path.join(t_dir, jaeg_base), 'utf-8'));
+  traders[ETraders.RAGMAN].base = JSON.parse(fs.readFileSync(path.join(t_dir, ragm_base), 'utf-8'));
+  traders[ETraders.PEACEKEEPER].base = JSON.parse(fs.readFileSync(path.join(t_dir, peac_base), 'utf-8'));
+  traders[ETraders.FENCE].base = JSON.parse(fs.readFileSync(path.join(t_dir, fenc_base), 'utf-8'));
+  traders[ETraders.BTR].base = JSON.parse(fs.readFileSync(path.join(t_dir, btr_base), 'utf-8'));
+  traders[ETraders.LIGHTHOUSEKEEPER].base = JSON.parse(fs.readFileSync(path.join(t_dir, ligh_base), 'utf-8'));
+  traders[ETraders.SKIER].base = JSON.parse(fs.readFileSync(path.join(t_dir, skie_base), 'utf-8'));
+  traders[ETraders.REF].base = JSON.parse(fs.readFileSync(path.join(t_dir, ref_base), 'utf-8'));
 }
 
 export function loadQuestTemplates(path: string) {
@@ -234,7 +518,7 @@ export function loadQuestTemplates(path: string) {
 
   }
 
-  console.log(`Writing to file: (${Object.keys(questDict)}) quests...`);
+  console.log(`Writing to file: (${Object.keys(questDict).length}) quests...`);
   fs.writeFileSync('./data/QuestTemplateDict.json', JSON.stringify(questDict, null, 2), "utf-8");
   console.log(`Write complete!`);
 
@@ -248,6 +532,7 @@ export function loadPricesTemplate(path: string) {
     process.exit(1);
   }
 
+  console.log(`Loading prices template...`);
   const priceData = JSON.parse(fs.readFileSync(path, 'utf-8'));
 
   // A list of item ids with price
@@ -260,28 +545,10 @@ export function loadPricesTemplate(path: string) {
     priceDict[key] = priceData[key];
   }
 
+  console.log(`Prices found: (${Object.keys(priceDict).length})`);
+
   // No minification needed, prices.json is already
   //   small & efficient.
   return priceDict;
 }
 
-
-export function localizeItems(templateItems: ITemplateItem[], localeItems: ILocaleInfo[]) {
-
-  for (const t_item of templateItems) {
-    if (t_item['_id'] in localeItems) {
-      // match
-    }
-  }
-}
-
-export function localizeTraders(traderDict: TTraderDict, localeDict: TLocaleDict) {
-
-}
-
-export function localizeQuests(questDict: TQuestDict) {
-
-  for (const key of Object.keys(questDict)) {
-
-  }
-}
