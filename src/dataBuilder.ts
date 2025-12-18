@@ -1,8 +1,8 @@
 import * as fs from 'node:fs';
 import { BaseClasses } from './models/enums/BaseClasses';
 import { ITemplateItem } from './models/spt/ITemplateItem';
-import type { TItemRef, TItemRefDict } from './models/spt/IItemRef';
-import type { TLocaleItem, TLocaleItemDict, TLocaleQuestDict, TLocaleStringDict, TLocaleTraderDict } from './models/spt/ILocale';
+import type { THandbookDict, TItem, TItemDict } from './models/spt/IItemDict';
+import type { TLocaleItemDict, TLocaleQuestDict, TLocaleStringDict, TLocaleTraderDict } from './models/spt/ILocale';
 import type { TTraderDict, TTrader } from './models/spt/ITraders';
 import { TQuestDict } from './models/spt/IQuest';
 import { ETraders } from './models/enums/Traders';
@@ -61,31 +61,31 @@ export function loadItemTemplates(itemPath: string) {
   }
 
 
-  const itemMap: Map<string, ITemplateItem | unknown> = new Map();
-  const items = JSON.parse(fs.readFileSync(itemPath, 'utf-8'));
-  const itemRefs: TItemRefDict = {};
+  //const itemMap: Map<string, ITemplateItem | unknown> = new Map();
+  const itemsData = JSON.parse(fs.readFileSync(itemPath, 'utf-8'));
+  const itemBase: TItemDict = {};
 
-  for (const item of Object.keys(items)) {
+  for (const item of Object.keys(itemsData)) {
 
-    itemMap.set(item, items[item]);
+    //itemMap.set(item, itemsData[item]);
 
-    if (!itemRefs[item]) {
-      itemRefs[item] = {
-        id: items[item]['_id'],
-        name: items[item]['_name'],
-        parent: items[item]['_parent']
+    if (!itemBase[item]) {
+      itemBase[item] = {
+        _id: itemsData[item]['_id'],
+        _name: itemsData[item]['_name'],
+        _parent: itemsData[item]['_parent']
       }
     }
   }
 
-  console.log(`Item Map : (${itemMap.size})`);
-  console.log(`Item Refs : (${Object.keys(itemRefs).length})`);
+  //console.log(`Item Map : (${itemMap.size})`);
+  console.log(`Item Base : (${Object.keys(itemBase).length})`);
 
-  console.log('writing Item Templates file...');
-  fs.writeFileSync('./data/ItemTemplateDict.json', JSON.stringify(itemRefs, null, 2), "utf-8");
+  console.log('writing ItemTemplates file...');
+  fs.writeFileSync('./data/ItemTemplateDict.json', JSON.stringify(itemBase, null, 2), "utf-8");
   console.log('write complete!');
 
-  return itemRefs;
+  return itemBase;
 }
 
 // Loads English translations for game items
@@ -552,3 +552,28 @@ export function loadPricesTemplate(path: string) {
   return priceDict;
 }
 
+export function loadHandbook(path: string) {
+
+  if (!fs.existsSync(path)) {
+    console.log(`Could not find handbook file: (${path})`);
+    process.exit(1);
+  }
+
+  const handbookData = JSON.parse(fs.readFileSync(path, 'utf-8'));
+  const handbookItems = handbookData['Items'];
+  const handbookDict: THandbookDict = {};
+
+  for (const item of handbookItems) {
+
+    handbookDict[item['Id']] = {
+      Id: item['Id'],
+      ParentId: item['ParentId'],
+      Price: item['Price']
+    };
+  }
+
+  console.log(`Handbook items: (${Object.keys(handbookDict).length})`);
+  fs.writeFileSync('./data/handbookItemsDict.json', JSON.stringify(handbookDict, null, 2));
+
+  return handbookDict;
+}

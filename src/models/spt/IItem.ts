@@ -1,4 +1,8 @@
-
+/** Used by
+ * 
+ *  templates:
+ *    defaultEquipmentPresets.json
+ */
 export interface IItem {
   _id: string;
   _tpl: string;
@@ -8,6 +12,7 @@ export interface IItem {
   upd?: IUpd;
 }
 
+// database/templates/items.json
 export interface IItemBase {
   _id: string;
   _name: string;

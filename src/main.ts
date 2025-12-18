@@ -3,7 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
 // Data imports
-import { loadItemTemplates, loadLocaleInfo, loadPricesTemplate, loadQuestTemplates, loadTraderTemplates } from './dataBuilder';
+import { loadHandbook, loadItemTemplates, loadLocaleInfo, loadPricesTemplate, loadQuestTemplates, loadTraderTemplates } from './dataBuilder';
 
 // System flags
 const isMac = process.platform === 'darwin';
@@ -16,6 +16,7 @@ const loc_traders_dir = path.join(__dirname, "../../data/database/traders/");
 const loc_locations_dir = path.join(__dirname, "../../data/database/locations/");
 const loc_quests = path.join(__dirname, "../../data/database/templates/quests.json");
 const loc_prices = path.join(__dirname, '../../data/database/templates/prices.json');
+const loc_handbook = path.join(__dirname, '../../data/database/templates/handbook.json');
 
 const dev_templateItems = 'data/database/templates/items.json';
 
@@ -26,6 +27,8 @@ let defaultLocale = 'en';
 //const templateItemsDict = loadItemTemplates(loc_templateItems);
 //const questDict = loadQuestTemplates(loc_quests);
 //const prices = loadPricesTemplate(loc_prices);
+
+const handbook = loadHandbook(loc_handbook);
 
 loadLocaleInfo(loc_Locale);
 //const localeDict = loadLocaleInfo(loc_Locale);
