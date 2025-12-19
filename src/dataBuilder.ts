@@ -462,10 +462,22 @@ export function loadBotConfigFile(path?: string) {
   }
 
   const botCfgData = JSON.parse(fs.readFileSync(path, 'utf-8'));
-
   const botConfig: IBotConfig = botCfgData;
-
   console.log(`Loaded Bot Config!`)
 
   return botConfig;
+}
+
+export function loadPmcConfigFile(path?: string) {
+
+  if (!path) {
+    // Set to default file path
+    path = NodePath.join(__dirname, '../../', AppConfig.FileDefaults.Configs.pmc);
+  }
+
+  const pmcConfigData = JSON.parse(fs.readFileSync(path, 'utf-8'));
+  const pmcConfig: IPmcConfig = pmcConfigData;
+  console.log(`Loaded Pmc Config file!`);
+
+  return pmcConfig;
 }
