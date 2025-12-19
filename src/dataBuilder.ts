@@ -454,7 +454,6 @@ export function loadHandbook(path: string) {
   return handbookDict;
 }
 
-
 export function loadBotConfigFile(path?: string) {
 
   if (!path) {
