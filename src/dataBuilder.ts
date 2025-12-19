@@ -6,7 +6,8 @@ import type { TLocaleItemDict, TLocaleQuestDict, TLocaleStringDict, TLocaleTrade
 import type { TTraderDict, TTrader } from './models/spt/ITraders';
 import { TQuestDict } from './models/spt/IQuest';
 import { ETraders } from './models/enums/Traders';
-import path from 'node:path';
+import * as NodePath from 'node:path';
+import * as AppConfig from '../data/app.json'
 
 /* const TraderIdMap = new Map<string, string>();
 TraderIdMap.set("54cb50c76803fa8b248b4571", "Prapor");
@@ -335,17 +336,17 @@ export function loadTraderTemplates() {
   const skie_base = `${ETraders.SKIER}/base.json`;
   const ref_base = `${ETraders.REF}/base.json`
 
-  traders[ETraders.PRAPOR].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, prap_base), 'utf-8'));
-  traders[ETraders.THERAPIST].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, ther_base), 'utf-8'));
-  traders[ETraders.MECHANIC].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, mech_base), 'utf-8'));
-  traders[ETraders.JAEGER].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, jaeg_base), 'utf-8'));
-  traders[ETraders.RAGMAN].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, ragm_base), 'utf-8'));
-  traders[ETraders.PEACEKEEPER].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, peac_base), 'utf-8'));
-  traders[ETraders.FENCE].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, fenc_base), 'utf-8'));
-  traders[ETraders.BTR].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, btr_base), 'utf-8'));
-  traders[ETraders.LIGHTHOUSEKEEPER].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, ligh_base), 'utf-8'));
-  traders[ETraders.SKIER].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, skie_base), 'utf-8'));
-  traders[ETraders.REF].base = JSON.parse(fs.readFileSync(path.join(__dirname, t_dir, ref_base), 'utf-8'));
+  traders[ETraders.PRAPOR].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, prap_base), 'utf-8'));
+  traders[ETraders.THERAPIST].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, ther_base), 'utf-8'));
+  traders[ETraders.MECHANIC].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, mech_base), 'utf-8'));
+  traders[ETraders.JAEGER].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, jaeg_base), 'utf-8'));
+  traders[ETraders.RAGMAN].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, ragm_base), 'utf-8'));
+  traders[ETraders.PEACEKEEPER].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, peac_base), 'utf-8'));
+  traders[ETraders.FENCE].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, fenc_base), 'utf-8'));
+  traders[ETraders.BTR].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, btr_base), 'utf-8'));
+  traders[ETraders.LIGHTHOUSEKEEPER].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, ligh_base), 'utf-8'));
+  traders[ETraders.SKIER].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, skie_base), 'utf-8'));
+  traders[ETraders.REF].base = JSON.parse(fs.readFileSync(NodePath.join(__dirname, t_dir, ref_base), 'utf-8'));
 
   return traders;
 }
@@ -451,4 +452,21 @@ export function loadHandbook(path: string) {
   fs.writeFileSync('./data/handbookItemsDict.json', JSON.stringify(handbookDict, null, 2));
 
   return handbookDict;
+}
+
+
+export function loadBotConfigFile(path?: string) {
+
+  if (!path) {
+    // use default file location
+    path = NodePath.join(__dirname, '../../', AppConfig.FileDefaults.Configs.bot);
+  }
+
+  const botCfgData = JSON.parse(fs.readFileSync(path, 'utf-8'));
+
+  const botConfig: IBotConfig = botCfgData;
+
+  console.log(`Loaded Bot Config!`)
+
+  return botConfig;
 }

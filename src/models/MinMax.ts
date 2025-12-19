@@ -1,4 +1,4 @@
-export interface MinMax {
+type MinMax = {
   max: number;
   min: number;
 }

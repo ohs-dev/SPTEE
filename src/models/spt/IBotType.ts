@@ -1,23 +1,10 @@
 import { type MinMax } from "../MinMax.js";
 
 
-
 export interface IBotType {
-  //appearance: IAppearance;
-  // Chance bot will have items from specified category
-  chances: IChanceType;
-  //chances: IChances;
-  /* chances: {
-    equipment: IChanceEquipment;
-    weaponMods: IChanceWeaponMods;
-    equipmentMods: IChanceEquipmentMods;
-  } */
-  /* difficulty: {
-    easy: IDifficultySetting;
-    normal: IDifficultySetting;
-    hard: IDifficultySetting;
-    impossible: IDifficultySetting;
-  } */
+  appearance: IAppearance;
+  // Chance bot has items from category
+  chances: IChances;
   difficulty: IDifficultyType;
   experience: IExperience;
   firstName: string[];
@@ -26,17 +13,9 @@ export interface IBotType {
     items: IItemGen;
   }
   health: IHealth;
-
-  // Equippable list of gear, ammo, items. (possibly)?
+  // Equippable list of gear, ammo, items
   inventory: IInventory;
-  /* inventory: {
-    Ammo: IInventoryAmmo;
-    equipment: IInventoryEquipment;
-    items: IInventoryItems;
-    mods: IInventoryMods;
-  } */
-  //lastName: string[];
-  //skills: ISkills;
+  lastName: string[];
   skills: IBotTypeSkills;
 }
 
@@ -64,10 +43,6 @@ export interface IDifficultySetting {
   Shoot: Record<string, string | number | boolean>;
 }
 
-type TDifficultySubcategory = {
-  
-}
-
 export interface IChanceType {
   equipment: IChanceEquipment;
   weaponMods: IChanceWeaponMods;
@@ -78,7 +53,7 @@ export interface IHealth {
   BodyParts: IBodyPart[];
   Energy?: MinMax;
   Hydration?: MinMax;
-  //Temperature?: MinMax;
+  Temperature?: MinMax;
 }
 
 export interface IBodyPart {
@@ -96,19 +71,19 @@ export interface IBotTypeSkills {
   Mastering: Record<string, MinMax>;
 }
 
-/* export interface IAppearance {
+export interface IAppearance {
   body: Record<string, number>;
   feet: Record<string, number>;
   hands: Record<string, number>;
   head: Record<string, number>;
   voice: Record<string, number>;
-} */
+}
 
-/* export interface IChances {
+export interface IChances {
   equipment: IChanceEquipment;
   weaponMods: IChanceWeaponMods;
   equipmentMods: IChanceWeaponMods;
-} */
+}
 
 export interface IChanceEquipment {
   ArmBand: number;
@@ -194,17 +169,9 @@ export interface IChanceWeaponMods {
 }
 
 export interface IExperience {
-  // key = bot difficulty
   aggressorBonus: Record<string, number>;
-  /* aggressorBonus: {
-    easy: number;
-    hard: number;
-    normal: number;
-  } */
   level: MinMax;
-  // key = bot difficulty
-  reward: Record<string, MinMax>; // easy, hard, normal
-  // key = bot difficulty
+  reward: Record<string, MinMax>;
   standingForKill: Record<string, number>;
   useSimpleAnimator: boolean;
 }

@@ -2,7 +2,7 @@
 
 
 interface IAiming {
-  
+
 }
 
 
@@ -87,11 +87,6 @@ type MasteringSkills = {
   mp7: MinMax;
   r700: MinMax;
   sr1mp: MinMax;
-}
-
-type MinMax = {
-  min: number;
-  max: number;
 }
 
 

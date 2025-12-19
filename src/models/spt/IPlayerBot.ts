@@ -1,13 +1,22 @@
-import { type IItem, type IUpd } from "./IItem.js";
-import { type IPmcDataRepeatableQuest } from "./IRepeatableQuests.js";
+// 2025-12-18 renamed from IBotBase.ts to IPlayerBot.ts
+import { type IItem, type IUpd } from "./IItem";
+import { type IPmcDataRepeatableQuest } from "./IRepeatableQuests";
 //import { IRagfairOffer } from "./IRagfairOffer.js";
-import { BonusType, BonusSkillType } from "../enums/Bonus.js";
-import { HideoutAreas } from "../enums/HideoutAreas.js";
-//import { MemberCategory } from "@spt/models/enums/MemberCategory";
-import { QuestStatus } from "../enums/QuestStatus.js";
+//import { BonusType, BonusSkillType } from "../enums/Bonus";
+import { HideoutAreas } from "../enums/HideoutAreas";
+import { QuestStatus } from "../enums/QuestStatus";
 
-/* Player Scav? */
-export interface IBotBase {
+/* Appears most relevant to user profile_id:
+{
+  ...
+  "characters": {
+    "pmc": <this>,
+    "scav": <this>
+  }
+} */
+
+// export interface IBotBase {
+export interface IPlayerBot {
   _id: string;
   aid: number;
   /** SPT property - use to store player id - TODO - move to AID ( account id as guid of choice) */
