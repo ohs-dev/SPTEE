@@ -481,3 +481,21 @@ export function loadPmcConfigFile(path?: string) {
 
   return pmcConfig;
 }
+
+export function loadRagfairConfigFile(path?: string) {
+
+  if (!path) {
+    path = NodePath.join(__dirname, '../../', AppConfig.FileDefaults.Configs.ragfair);
+  }
+
+  const ragfairData = JSON.parse(fs.readFileSync(path, 'utf-8'));
+  const ragfairConfig: IRagfairConfig = ragfairData;
+
+  return ragfairConfig;
+}
+
+// (OPTIONAL) configs/quest.json
+//   *  daily quests
+//   *  event quests
+//   *  message redeem timer
+//   *  locationIdMap ( <map_name>: <id_string> )
