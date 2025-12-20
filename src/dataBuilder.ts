@@ -463,7 +463,7 @@ export function loadBotConfigFile(path?: string) {
 
   const botCfgData = JSON.parse(fs.readFileSync(path, 'utf-8'));
   const botConfig: IBotConfig = botCfgData;
-  console.log(`Loaded Bot Config!`)
+  console.log(`Loaded Bot config file!`)
 
   return botConfig;
 }
@@ -477,7 +477,7 @@ export function loadPmcConfigFile(path?: string) {
 
   const pmcConfigData = JSON.parse(fs.readFileSync(path, 'utf-8'));
   const pmcConfig: IPmcConfig = pmcConfigData;
-  console.log(`Loaded Pmc Config file!`);
+  console.log(`Loaded Pmc config file!`);
 
   return pmcConfig;
 }
@@ -490,6 +490,7 @@ export function loadRagfairConfigFile(path?: string) {
 
   const ragfairData = JSON.parse(fs.readFileSync(path, 'utf-8'));
   const ragfairConfig: IRagfairConfig = ragfairData;
+  console.log(`Loaded Ragfair config file!`);
 
   return ragfairConfig;
 }
@@ -505,6 +506,19 @@ export function loadTraderConfigFile(path?: string) {
   console.log(`Loaded Trader config file!`);
 
   return traderConfig;
+}
+
+export function loadLocationConfigFile(path?: string) {
+
+  if (!path) {
+    path = NodePath.join(__dirname, '../../', AppConfig.FileDefaults.Configs.location);
+  }
+
+  const locationConfigData = JSON.parse(fs.readFileSync(path, 'utf8'));
+  const locationConfig: ILocationConfig = locationConfigData;
+  console.log(`Loaded location config file!`);
+
+  return locationConfig;
 }
 
 // (OPTIONAL) configs/quest.json
