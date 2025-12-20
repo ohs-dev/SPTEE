@@ -3,7 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
 // Data imports
-import { loadBotConfigFile, loadHandbook, loadItemTemplates, loadLocaleInfo, loadPmcConfigFile, loadPricesTemplate, loadQuestTemplates, loadTraderTemplates } from './dataBuilder';
+import { loadBotConfigFile, loadHandbook, loadItemTemplates, loadLocaleInfo, loadPmcConfigFile, loadPricesTemplate, loadQuestTemplates, loadTraderConfigFile, loadTraderTemplates } from './dataBuilder';
 
 // System flags
 const isMac = process.platform === 'darwin';
@@ -32,6 +32,7 @@ loadLocaleInfo(loc_Locale);
 
 const botCfg = loadBotConfigFile();
 const pmcCfg = loadPmcConfigFile();
+const traderCfg = loadTraderConfigFile();
 
 //const localeDict = loadLocaleInfo(loc_Locale);
 

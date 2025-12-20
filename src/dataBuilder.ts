@@ -494,6 +494,19 @@ export function loadRagfairConfigFile(path?: string) {
   return ragfairConfig;
 }
 
+export function loadTraderConfigFile(path?: string) {
+
+  if (!path) {
+    path = NodePath.join(__dirname, '../../', AppConfig.FileDefaults.Configs.trader);
+  }
+
+  const traderConfigData = JSON.parse(fs.readFileSync(path, 'utf8'));
+  const traderConfig: ITraderConfig = traderConfigData;
+  console.log(`Loaded Trader config file!`);
+
+  return traderConfig;
+}
+
 // (OPTIONAL) configs/quest.json
 //   *  daily quests
 //   *  event quests
