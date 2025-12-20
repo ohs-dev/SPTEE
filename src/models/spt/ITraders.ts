@@ -5,6 +5,7 @@ export type TTraderDict = {
 }
 
 export type TTrader = {
+  _id: string;
   nickname?: string;
   name?: string;
   description?: string;
