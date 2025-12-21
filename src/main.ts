@@ -3,9 +3,6 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { DataBuilder } from './dataBuilder';
 
-// Data imports
-//import { loadBotConfigFile, loadHandbook, loadItemTemplates, loadLocaleInfo, loadPmcConfigFile, loadPricesTemplate, loadQuestTemplates, loadTraderConfigFile, loadTraderTemplates } from './dataBuilder';
-
 const dataBuilder = new DataBuilder();
 dataBuilder.generate().then(() => {
   // display data
@@ -16,32 +13,8 @@ dataBuilder.generate().then(() => {
 const isMac = process.platform === 'darwin';
 const isDev = process.env.NODE_ENV !== 'production';
 
-// SPT data files
-/* const loc_Locale = path.join(__dirname, "../../data/database/locales/global/en.json");
-const loc_templateItems = path.join(__dirname, "../../data/database/templates/items.json");
-const loc_traders_dir = path.join(__dirname, "../../data/database/traders/");
-const loc_locations_dir = path.join(__dirname, "../../data/database/locations/");
-const loc_quests = path.join(__dirname, "../../data/database/templates/quests.json");
-const loc_prices = path.join(__dirname, '../../data/database/templates/prices.json');
-const loc_handbook = path.join(__dirname, '../../data/database/templates/handbook.json'); */
-
-
 // TODO: Change user locale option
 let defaultLocale = 'en';
-
-/* const traders = loadTraderTemplates();
-const templateItems = loadItemTemplates(loc_templateItems);
-const questDict = loadQuestTemplates(loc_quests);
-const prices = loadPricesTemplate(loc_prices);
-const handbook = loadHandbook(loc_handbook);
-// TODO: Locations
-loadLocaleInfo(loc_Locale);
-
-const botCfg = loadBotConfigFile();
-const pmcCfg = loadPmcConfigFile();
-const traderCfg = loadTraderConfigFile(); */
-
-//const localeDict = loadLocaleInfo(loc_Locale);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -61,6 +34,8 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    //console.log(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+    // http://localhost:5173
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadFile(

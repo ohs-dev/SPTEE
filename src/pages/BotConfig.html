@@ -4,8 +4,10 @@
 <head>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <meta charset='utf-8'>
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self'" />
+  <!-- <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'" /> -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
+  <meta http-equiv="X-Content-Security-Policy" content="script-src 'self'" />
   <title>SPTEnlightened - Bots AI</title>
   <link rel='stylesheet' type='text/css' media='screen'
     href='../styles/botconfig.css'>
@@ -105,7 +107,7 @@
             </button>
 
             <button id="a_quests" class="sideLink">
-              <img src="../assets/icons/compass.png" alt="" width="32px"
+              <img src="../assets/icons/pocketwatch.png" alt="" width="32px"
                 height="32px"> <span>Quests</span>
             </button>
 
@@ -281,16 +283,16 @@
             <img src="../assets/images/tarkov/figurines/killa_fig.webp" alt="">
           </div>
           <div class="card">
-            <h2>Reshala</h2>
-            <img src="../assets/images/tarkov/figurines/reshala_fig.webp"
-              alt="">
-          </div>
-          <div class="card">
             <h2>USEC</h2>
             <img src="../assets/images/tarkov/figurines/usec_fig.webp" alt="">
           </div>
           <div class="card">
-            <h2>Scav</h2>
+            <h2>BEAR</h2>
+            <img src="../assets/images/tarkov/figurines/bear_fig.webp" alt="">
+          </div>
+
+          <div class="card">
+            <h2>Scavs</h2>
             <img src="../assets/images/tarkov/figurines/scav_fig.webp" alt="">
           </div>
           <div class="card">
@@ -298,15 +300,11 @@
             <img src="../assets/images/tarkov/figurines/tagilla_fig.webp"
               alt="">
           </div>
-          <div class="card">
-            <h2>Cultist</h2>
-            <img src="../assets/images/tarkov/figurines/cultist_fig.webp"
-              alt="">
-          </div>
-          <div class="card">
+          <!-- <div class="card">
             <h2>Vengeful Killa</h2><img
-              src="https://assets.tarkov.dev/vengeful-killa-portrait.webp">
-          </div>
+              src="https://assets.tarkov.dev/vengeful-killa-portrait.webp"
+              alt="">
+          </div> -->
 
           <div class="card">
             <h2>Glukhar</h2>
@@ -353,8 +351,19 @@
           </div>
 
           <div class="card">
-            <h2>Sanitar guard</h2>
+            <h2>Sanitar guards</h2>
             <img src="../assets/images/tarkov/avatar/guard.webp" alt="">
+          </div>
+          <div class="card">
+            <h2>Reshala</h2>
+            <img src="../assets/images/tarkov/figurines/reshala_fig.webp"
+              alt="">
+          </div>
+          <div class="card">
+            <h2>Reshala Guards</h2>
+            <img
+              src="../assets/images/tarkov/avatar/glukhar-guard-security.webp"
+              alt="">
           </div>
 
           <div class="card">
@@ -373,12 +382,12 @@
           </div>
 
           <div class="card">
-            <h2>Kaban guard</h2>
+            <h2>Kaban guards</h2>
             <img src="../assets/images/tarkov/avatar/kaban-guard.webp" alt="">
           </div>
 
           <div class="card">
-            <h2>Kaban sniper</h2>
+            <h2>Kaban snipers</h2>
             <img src="../assets/images/tarkov/avatar/kaban-guard-sniper.webp"
               alt="">
           </div>
@@ -389,7 +398,7 @@
           </div>
 
           <div class="card">
-            <h2>Shturman guard</h2>
+            <h2>Shturman guards</h2>
             <img src="../assets/images/tarkov/avatar/shturman-guard.webp"
               alt="">
           </div>
@@ -410,28 +419,39 @@
           </div>
 
           <div class="card">
-            <h2>Kollontay guard</h2>
-            <img src="../assets/images/tarkov/avatar/npc.webp" alt="">
+            <h2>Kollontay guards</h2>
+            <img
+              src="../assets/images/tarkov/avatar/glukhar-guard-security.webp"
+              alt="">
           </div>
 
           <div class="card">
-            <h2>Raider</h2>
+            <h2>Raiders</h2>
             <img src="../assets/images/tarkov/avatar/raider.webp" alt="">
           </div>
 
           <div class="card">
-            <h2>Rogue</h2>
+            <h2>Rogues</h2>
             <img src="../assets/images/tarkov/avatar/rogue.webp" alt="">
           </div>
-
           <div class="card">
-            <h2></h2>
-            <img src="../assets/images/tarkov/avatar/" alt="">
+            <h2>Cultist Priest</h2>
+            <img src="../assets/images/tarkov/figurines/cultist_fig.webp"
+              alt="">
+          </div>
+          <div class="card">
+            <h2>Cultist Warriors</h2>
+            <img src="../assets/images/tarkov/figurines/cultist_fig.webp"
+              alt="">
+          </div>
+          <div class="card">
+            <h2>Smugglers</h2>
+            <img src="../assets/images/tarkov/figurines/scav_fig.webp" alt="">
           </div>
 
           <div class="card">
             <h2></h2>
-            <img src="../assets/images/tarkov/avatar/" alt="">
+            <img src="../assets/images/tarkov/avatar/npc.webp" alt="">
           </div>
         </div>
 

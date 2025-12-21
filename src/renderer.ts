@@ -70,15 +70,10 @@ function openFile(e) {
       "application/json"
     ];
 
-    const exampleImages = [
-      'image/gif',
-      'image/png',
-      'image/jpeg'
-    ];
-
     if (acceptedFileTypes.includes(file['type'])) {
 
       console.log('file is valid.');
+      console.log(`${file.name}`);
 
       fileName.textContent = file.name;
       //filePath.textContent = "";
@@ -94,7 +89,9 @@ function showGlobalsPage(e) {
 }
 
 function showBotsPage(e) {
-
+  //console.log(`Show bots`);
+  //console.log(`${window.location.href}`);
+  window.location.href = "src/pages/BotConfig.html";
 }
 
 function showPlayerPage(e) {

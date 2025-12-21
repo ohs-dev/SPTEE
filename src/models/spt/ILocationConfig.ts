@@ -1,11 +1,16 @@
 
 type ILocationConfig = {
+  // Loose items spawn multiplier
   looseLootMultiplier: Record<string, number>
+  // Static spawn multiplier
   staticLootMultiplier: Record<string, number>
   customWaves: {
+    // empty
     boss: {}
+    // empty
     normal: {}
   }
+  // empty
   openZones: {}
   // Quest Item forced spawns
   forcedLootSingleSpawnById: Record<string, string[]>
@@ -22,6 +27,7 @@ type ILocationConfig = {
   addOpenZonesToAllMaps: boolean
   addCustomBotWavesToMaps: boolean
   enableBotTypeLimits: boolean
+  // Limit bot amount for specific bot, by map
   botTypeLimits: Record<string,
     {
       type: string
@@ -35,11 +41,14 @@ type ILocationConfig = {
     containerGroupMinSizeMultiplier: number
     containerGroupMaxSizeMultiplier: number
   },
+  // Ammo amount in loose magazines, minimum
   minFillLooseMagazinePercent: number
   minFillStaticMagazinePercent: number
   allowDuplicateItemsInStaticContainers: true,
+  // Chance magazine has ammo, %
   magazineLootHasAmmoChancePercent: number
   staticMagazineLootHasAmmoChancePercent: number
+  // empty
   looseLootBlacklist: {},
   scavRaidTimeSettings: {
     settings: {
@@ -73,6 +82,7 @@ type ILocationConfig = {
 }
 
 type ILocationScavRaidTimes = {
+  // Reduce loot on map
   reduceLootByPercent: boolean
   minDynamicLootPercent: number
   minStaticLootPercent: number

@@ -30,7 +30,7 @@ export class DataBuilder {
   _traderDict: TTraderDict;
   _itemTemplates: TItemDict;
   _questTemplates: TQuestDict;
-  _priceTemplates: { [id: string]: number };
+  _priceTemplates: Record<string, number>;
   _handbookTemplate: THandbookDict;
 
   // Config
@@ -569,10 +569,6 @@ export class DataBuilder {
   }
 
 }
-
-
-
-
 
 // (OPTIONAL) configs/quest.json
 //   *  daily quests
