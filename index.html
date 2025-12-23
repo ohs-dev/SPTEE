@@ -7,6 +7,8 @@
   <meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
   <meta http-equiv="X-Content-Security-Policy" content="script-src 'self'" />
   <title>SPTEnlightened - Start</title>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./src/styles/index.css">
   <!-- <script src="src/render_page.js" defer></script> -->
 </head>
@@ -47,12 +49,9 @@
 
         </div>
 
-        <div class="nav_end">
-          <!-- <button class="btn secondary" id="saveBtn" title="Save file"
-              onclick="saveFile()"><span>Save</span></button>
-            <button class="btn secondary" id="loadBtn" title="Open data"
-              onclick="openFile()"><span>Load</span></button> -->
-          <svg width="64px" height="64px" viewBox="-2.4 -2.4 28.80 28.80"
+        <div class="nav_hb">
+
+          <!-- <svg width="64px" height="64px" viewBox="-2.4 -2.4 28.80 28.80"
             fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#dcdcdc">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
@@ -70,7 +69,21 @@
                 </clipPath>
               </defs>
             </g>
-          </svg>
+          </svg> -->
+          <button class="hb" id="menu-hb">
+            <i class="fa fa-bars fa-lg"></i>
+          </button>
+          <div class="drop_menu">
+            <p class="dm-title">Navigation</p>
+            <ul>
+              <li><a href="#">Globals</a></li>
+              <li><a href="#">Enemy Bot AI</a></li>
+              <li><a href="#">Quests</a></li>
+              <li><a href="#">Map Settings</a></li>
+              <li><a href="#">Trader Settings</a></li>
+              <li><a href="#">Player Profile</a></li>
+            </ul>
+          </div>
         </div>
 
       </div>

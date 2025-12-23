@@ -3,11 +3,15 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { DataBuilder } from './dataBuilder';
 
-const dataBuilder = new DataBuilder();
-dataBuilder.generate().then(() => {
-  // display data
-  console.log(`Data Generated.`);
-})
+// Flag for testing dataBuilder. If false -> run
+let hasData = true;
+
+if (!hasData) {
+  const dataBuilder = new DataBuilder();
+  dataBuilder.generate().then(() => {
+    console.log(`Data Generated.`);
+  })
+}
 
 // System flags
 const isMac = process.platform === 'darwin';

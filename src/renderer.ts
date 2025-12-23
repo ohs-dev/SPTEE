@@ -38,6 +38,7 @@ const fileInput = document.querySelector('#fileInput');
 const filePath = document.querySelector('#filepath');
 const fileName = document.querySelector('#filename');
 
+
 // Header nav
 const navbtnGlobals = document.querySelector('#nav_globals');
 const navbtnBots = document.querySelector('#nav_bots');
@@ -45,6 +46,11 @@ const navbtnMaps = document.querySelector('#nav_maps');
 const navbtnQuests = document.querySelector('#nav_quests');
 const navbtnTraders = document.querySelector('#nav_traders');
 const navbtnPlayer = document.querySelector('#nav_player');
+
+// Hamburger nav
+const hb = document.querySelector('button.hb');
+hb.addEventListener('click', toggleDropMenu);
+const dropMenu = document.querySelector('div.drop_menu');
 
 // Aside nav
 const abtnGlobals = document.querySelector('#a_globals');
@@ -55,6 +61,8 @@ const abtnTraders = document.querySelector('#a_traders');
 const abtnQuests = document.querySelector('#a_quests');
 
 fileInput.addEventListener('change', openFile);
+
+
 
 
 function openFile(e) {
@@ -81,6 +89,14 @@ function openFile(e) {
       console.log('Unsupported file type.');
       fileName.textContent = "{Invalid File}";
     }
+  }
+}
+
+function toggleDropMenu() {
+  if (dropMenu.classList.contains('hidden')) {
+    dropMenu.classList.remove('hidden');
+  } else {
+    dropMenu.classList.add('hidden');
   }
 }
 
